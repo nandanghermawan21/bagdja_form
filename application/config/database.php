@@ -76,7 +76,7 @@ $query_builder = TRUE;
 $db['default'] = array(
     'dsn'          => '',
     'hostname'     => 'mssql-69555-0.cloudclusters.net',
-	'port'		   =>  19048,
+	'port'		   =>  '19048',
     'username'     => 'admin',
     'password'     => '@H3rm4w4n',
     'database'     => 'bagdja_form',
@@ -89,6 +89,7 @@ $db['default'] = array(
     'char_set'     => 'utf8',
     'dbcollat'     => 'utf8_general_ci',
     'swap_pre'     => '',
+    
     'encrypt'      => FALSE,
     'compress'     => FALSE,
     'stricton'     => FALSE,
