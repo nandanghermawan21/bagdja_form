@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-    'dsn'          => 'mssql-69555-0.cloudclusters.net,19048',
+    'dsn'          => '',
     'hostname'     => 'mssql-69555-0.cloudclusters.net',
 	'port'		   =>  19048,
     'username'     => 'admin',
