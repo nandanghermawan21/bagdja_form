@@ -146,7 +146,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 		print_r($connection);
 
 		$serverName = "mssql-69555-0.cloudclusters.net, 19048"; //serverName\instanceName, portNumber (default is 1433)
-		$connectionInfo = array( "Database"=>"bagdja_form", "UID"=>"user", "PWD"=>"Admin123");
+		$connectionInfo = array( "Database"=>"bagdja_form", "UID"=>"admin", "PWD"=>"@H3rm4w4n");
 
 		if (FALSE !== ($this->conn_id = sqlsrv_connect($serverName, $connectionInfo)))
 		{
