@@ -141,8 +141,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			unset($connection['UID'], $connection['PWD']);
 		}
 
-		// if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname, $connection)))
-		if (FALSE !== ($this->conn_id = sqlsrv_connect("mssql-69555-0.cloudclusters.net,19048", $connection)))
+		if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname.", ".$this->port, $connection)))
 		{
 			// Determine how identifiers are escaped
 			$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
