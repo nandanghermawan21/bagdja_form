@@ -97,21 +97,24 @@ class City_model extends CI_Model
 
     public function getAll(): array
     {
-        $this->db->select('*');
-        $this->db->from($this->tableName);
-        $this->db->like($this->nameField(), 'Kota', 'after');
-        $this->db->order_by($this->nameField(), "asc");
+        // $this->db->select('*');
+        // $this->db->from($this->tableName);
+        // $this->db->like($this->nameField(), 'Kota', 'after');
+        // $this->db->order_by($this->nameField(), "asc");
 
-        $query = $this->db->get();
+        // $query = $this->db->get();
 
-        echo "halo saya dieksekusi nih ".$query;
+        // echo "halo saya dieksekusi nih ".$query;
 
-        $result = [];
+        // $result = [];
         // foreach ($query->result() as $row) {
         //     $city = new City_model();
         //     $result[] = $city->fromRow($row);
         // }
 
-        return $result;
+
+        $query = $this->db->get('mytable', 10, 20);
+
+        return $query;
     }
 }
