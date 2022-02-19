@@ -83,7 +83,7 @@ $db['default'] = array(
     'dbdriver'     => 'sqlsrv',
     'dbprefix'     => '',
     'pconnect'     => FALSE,
-    'db_debug'     => TRUE,
+    'db_debug'     => FALSE,
     'cache_on'     => FALSE,
     'cachedir'     => '',
     'char_set'     => 'utf8',
@@ -93,5 +93,5 @@ $db['default'] = array(
     'compress'     => FALSE,
     'stricton'     => FALSE,
     'failover'     => array(),
-    'save_queries' => FALSE
+    'save_queries' => TRUE
 ); 
