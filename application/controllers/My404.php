@@ -19,6 +19,7 @@ class My404 extends CI_Controller
 
         $this->output->set_status_header('404');
 
-        $this->load->view('errors/api/error_404');
+        $this->db->error(); 
+
     }
 }
