@@ -2,7 +2,7 @@
 ##test jwt
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/u1276530/public_html/api-suzuki/
+    - export DEPLOYPATH=/home/u1276530/public_html/form/
     - /bin/rm -Rf $DEPLOYPATH
     - /bin/mkdir $DEPLOYPATH
     - /bin/cp -R application/ $DEPLOYPATH

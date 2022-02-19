@@ -75,11 +75,11 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'u1276530_admin',
+	'hostname' => 'mssql-69555-0.cloudclusters.net',
+	'username' => 'admin',
 	'password' => 'h3rm4w4n',
-	'database' => 'u1276530_suzuki',
-	'dbdriver' => 'mysqli',
+	'database' => 'bagdja_form',
+	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
