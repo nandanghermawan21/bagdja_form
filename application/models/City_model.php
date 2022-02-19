@@ -104,7 +104,7 @@ class City_model extends CI_Model
 
         $query = $this->db->get();
 
-        echo $query;
+        echo "halo saya dieksekusi nih";
 
         $result = [];
         // foreach ($query->result() as $row) {
