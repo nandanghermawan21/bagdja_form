@@ -141,6 +141,8 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			unset($connection['UID'], $connection['PWD']);
 		}
 
+		echo "ini hostname sql server nya ".$this->hostname.", ".$this->port;
+
 		if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname.", ".$this->port, $connection)))
 		{
 			// Determine how identifiers are escaped
