@@ -107,10 +107,10 @@ class City_model extends CI_Model
         echo $query;
 
         $result = [];
-        foreach ($query->result() as $row) {
-            $city = new City_model();
-            $result[] = $city->fromRow($row);
-        }
+        // foreach ($query->result() as $row) {
+        //     $city = new City_model();
+        //     $result[] = $city->fromRow($row);
+        // }
 
         return $result;
     }
