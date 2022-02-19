@@ -142,7 +142,8 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 		}
 
 		echo "ini hostname sql server nya ".$this->hostname.", ".$this->port;
-		echo "connection info sql server nya ".$connection;
+		echo "connection info sql server nya ";
+		print_r($connection);
 
 		if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname.", ".$this->port, $connection)))
 		{
