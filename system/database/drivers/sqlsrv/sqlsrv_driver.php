@@ -128,10 +128,10 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			'UID'			=> empty($this->username) ? '' : $this->username,
 			'PWD'			=> empty($this->password) ? '' : $this->password,
 			'Database'		=> $this->database,
-			'ConnectionPooling'	=> $pooling,
+			// 'ConnectionPooling'	=> ($pooling === TRUE) ? 1 : 0,
 			'CharacterSet'		=> $charset,
-			'Encrypt'		=> $this->encrypt,
-			'ReturnDatesAsStrings'	=> 1
+			// 'Encrypt'		=> ($this->encrypt === TRUE) ? 1 : 0,
+			'ReturnDatesAsStrings'	=> true
 		);
 
 		// If the username and password are both empty, assume this is a
