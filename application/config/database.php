@@ -73,12 +73,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['mssql'] = array(
+$db['default'] = array(
     'dsn'          => '',
     'hostname'     => 'mssql-69555-0.cloudclusters.net',
     'username'     => 'admin',
     'password'     => '@H3rm4w4n',
-    'database'     => 'bagdja_form',
+    'database'     => 'bag',
     'dbdriver'     => 'sqlsrv',
     'dbprefix'     => '',
     'pconnect'     => FALSE,
