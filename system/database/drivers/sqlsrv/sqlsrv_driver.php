@@ -128,10 +128,10 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			'UID'			=> empty($this->username) ? '' : $this->username,
 			'PWD'			=> empty($this->password) ? '' : $this->password,
 			'Database'		=> $this->database,
-			// 'ConnectionPooling'	=> ($pooling === TRUE) ? 1 : 0,
-			// 'CharacterSet'		=> $charset,
-			// 'Encrypt'		=> ($this->encrypt === TRUE) ? 1 : 0,
-			// 'ReturnDatesAsStrings'	=> true
+			'ConnectionPooling'	=> ($pooling === TRUE) ? 1 : 0,
+			'CharacterSet'		=> $charset,
+			'Encrypt'		=> ($this->encrypt === TRUE) ? 1 : 0,
+			'ReturnDatesAsStrings'	=> 1
 		);
 
 		// If the username and password are both empty, assume this is a
@@ -141,14 +141,7 @@ class CI_DB_sqlsrv_driver extends CI_DB {
 			unset($connection['UID'], $connection['PWD']);
 		}
 
-		echo "ini hostname sql server nya ".$this->hostname.", ".$this->port;
-		echo "connection info sql server nya ";
-		print_r($connection);
-
-		$serverName = "mssql-69555-0.cloudclusters.net, 19048"; //serverName\instanceName, portNumber (default is 1433)
-		$connectionInfo = array( "Database"=>"bagdja_form", "UID"=>"admin", "PWD"=>"@H3rm4w4n");
-
-		if (FALSE !== ($this->conn_id = sqlsrv_connect($serverName, $connectionInfo)))
+		if (FALSE !== ($this->conn_id = sqlsrv_connect($this->hostname, $connection)))
 		{
 			// Determine how identifiers are escaped
 			$query = $this->query('SELECT CASE WHEN (@@OPTIONS | 256) = @@OPTIONS THEN 1 ELSE 0 END AS qi');
