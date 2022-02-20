@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'          => '',
-    'hostname'     => 'mssql-69555-0.cloudclusters.net',
+    'hostname'     => 'mssql-69555-0.cloudclusters.net, 19048',
 	'port'		   => '19048',
-    'username'     => 'user',
-    'password'     => 'Admin123',
+    'username'     => 'admin',
+    'password'     => '@H3rm4w4n',
     'database'     => 'bagdja_form',
     'dbdriver'     => 'sqlsrv',
     'dbprefix'     => '',
