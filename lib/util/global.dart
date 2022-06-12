@@ -1,4 +1,7 @@
+import 'package:suzuki/model/user_model.dart';
+
 class Global {
+  UserModel? user;
   String? token = "";
   String? messagingToken;
   Uri? currentDeepLinkUri;
