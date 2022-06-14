@@ -70,7 +70,7 @@ class UserModel {
         "password": password ?? "",
       },
     ).then((value) {
-      return value == null ? null : UserModel.fromJson(json.decode(value));
+      return value == null ? null : UserModel.fromJson((value));
     }).catchError(
       (onError) {
         throw onError;
