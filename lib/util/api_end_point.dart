@@ -1,8 +1,8 @@
 import 'package:suzuki/util/mode_util.dart';
 
 class ApiEndPoint {
-  String baseUrl = "https://apiform.bagdja.com/";
-  String baseUrlDebug = "https://apiform.bagdja.com/";
+  String baseUrl = "https://form.bagdja.com/api//";
+  String baseUrlDebug = "https://form.bagdja.com/api//";
   String loginUrl = "auth/login";
 
   //tag: question
