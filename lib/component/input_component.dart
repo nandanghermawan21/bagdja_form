@@ -102,40 +102,38 @@ class InputComponent {
                         );
                       });
                     },
-                    child: Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(
-                            color: Colors.grey.shade400,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      height: 50,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Colors.grey.shade400,
                         ),
-                        height: 50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                  color: Colors.transparent,
-                                  alignment: Alignment.centerLeft,
-                                  child: selectedBuilder != null
-                                      ? selectedBuilder(value)
-                                      : itemBuilder!(value)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Container(
+                                color: Colors.transparent,
+                                alignment: Alignment.centerLeft,
+                                child: selectedBuilder != null
+                                    ? selectedBuilder(value)
+                                    : itemBuilder!(value)),
+                          ),
+                          Container(
+                            width: 25,
+                            color: Colors.transparent,
+                            child: const Center(
+                              child: Icon(FontAwesomeIcons.caretDown),
                             ),
-                            Container(
-                              width: 25,
-                              color: Colors.transparent,
-                              child: const Center(
-                                child: Icon(FontAwesomeIcons.caretDown),
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
                   );
