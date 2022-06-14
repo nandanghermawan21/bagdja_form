@@ -62,7 +62,8 @@ class Network {
     newHeaders.addAll({
       "Content-Type": "application/json",
       "Client-Timestamp": formatISOTime(timeStamp),
-      "Access-Control_Allow_Origin": "*",
+      'Access-Control-Allow-Origin': '*', // Replace your domain
+      'Access-Control-Allow-Methods': 'POST, GET, DELETE, HEAD, OPTIONS',
     });
 
     return http
