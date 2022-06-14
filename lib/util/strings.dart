@@ -19,4 +19,8 @@ abstract class Strings {
   String get user => "User";
   String get dataCollection => "Data Collection";
   String get underConstruction => "Under Contruction";
+  String get search => "Cari";
+  String get showMore => "Tampilkan Lainnya";
+  String get save => "Simpan";
+  String get selectQuestionType => "Pilih Jenis Pertanyaan";
 }

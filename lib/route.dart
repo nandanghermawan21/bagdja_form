@@ -5,6 +5,7 @@ import 'package:suzuki/view/login_view.dart';
 import 'package:suzuki/view/main_menu.dart';
 import 'package:unicons/unicons.dart';
 import 'package:suzuki/view/under_construction_view.dart';
+import 'package:suzuki/view/form_designer_view.dart';
 
 String initialRouteName = RouteName.login;
 
@@ -12,7 +13,7 @@ class RouteName {
   static const String login = "login";
   static const String mainMenu = "mainmenu";
   static const String dashboard = "dashboard";
-  static const String form = "form";
+  static const String formDesigner = "formDesigner";
   static const String datacollection = "datacollection";
   static const String user = "user";
 }
@@ -40,7 +41,7 @@ Map<String, WidgetBuilder> route = {
           title: System.data.strings!.dashboard,
         ),
         MenuModel(
-          id: RouteName.form,
+          id: RouteName.formDesigner,
           iconData: UniconsLine.file,
           title: System.data.strings!.form,
         ),
@@ -56,7 +57,12 @@ Map<String, WidgetBuilder> route = {
         ),
       ],
       onCreateBody: (menu) {
-        return UnderConstructionView();
+        switch (menu?.id) {
+          case RouteName.formDesigner:
+            return const FormDesignerView();
+          default:
+            return UnderConstructionView();
+        }
       },
     );
   }

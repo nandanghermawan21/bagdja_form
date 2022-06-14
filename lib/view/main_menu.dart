@@ -92,6 +92,7 @@ class MainMenuState extends State<MainMenuView> {
                 color: Colors.transparent,
                 width: double.infinity,
                 height: double.infinity,
+                padding: const EdgeInsets.only(left: 40),
                 child: Consumer<MainMenuViewModel>(
                   builder: (c, d, w) {
                     if (widget.onCreateBody != null) {

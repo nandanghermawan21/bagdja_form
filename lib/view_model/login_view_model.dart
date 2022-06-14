@@ -42,6 +42,7 @@ class LoginViewMOdel extends ChangeNotifier {
     String userJson = System.data.session!.getString(SessionKey.user) ?? "";
     if (userJson != "") {
       System.data.global.user = UserModel.fromJson(json.decode(userJson));
+      System.data.global.token = System.data.global.user?.token;
       if (onLOginSuccess != null) {
         onLOginSuccess();
       }

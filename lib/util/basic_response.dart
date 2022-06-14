@@ -17,7 +17,7 @@ class BasicResponse {
     return BasicResponse(
       status: (json["status"] as String?),
       message: (json["message"] as dynamic),
-      data: (json["data"] as Map<String, dynamic>),
+      data: (json["data"] as dynamic),
       summary: (json["summary"] as dynamic),
       total: (json["total"] as num?)?.toInt(),
     );

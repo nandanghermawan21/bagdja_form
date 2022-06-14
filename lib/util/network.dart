@@ -47,6 +47,46 @@ class Network {
     );
   }
 
+  static Future<dynamic> get({
+    required Uri url,
+    String? relativeUrl = "",
+    Encoding? encoding,
+    Map<String, String>? headers,
+    ValueChanged<BasicResponse>? otpRequired,
+    ValueChanged<BasicResponse>? unAuthorized,
+  }) {
+    DateTime timeStamp = DateTime.now();
+
+    Map<String, String> newHeaders = headers ?? {};
+
+    newHeaders.addAll({
+      "Content-Type": "application/json",
+      "Client-Timestamp": formatISOTime(timeStamp),
+      "Access-Control_Allow_Origin": "*",
+    });
+
+    return http
+        .get(
+      url,
+      headers: newHeaders,
+    )
+        .then(
+      (http.Response response) {
+        debugPrint("POST ${url.toString()}");
+        debugPrint("response ${response.body}");
+        try {
+          return handleResponse(
+            response,
+            otpRequired: otpRequired,
+            unAuthorized: unAuthorized,
+          );
+        } catch (e) {
+          rethrow;
+        }
+      },
+    );
+  }
+
   static handleResponse(
     http.Response response, {
     ValueChanged<BasicResponse>? otpRequired,
@@ -92,7 +132,7 @@ class Network {
       } else {
         switch (basicResponse.status) {
           case BasicResponseStatus.successWithData:
-            return json.encode(basicResponse.data);
+            return basicResponse.data as dynamic;
           default:
             return res;
         }
