@@ -6,7 +6,11 @@ import 'package:suzuki/model/question_types_model.dart';
 import 'package:suzuki/util/system.dart';
 
 class QuestionComponent {
-  static questionItem(QuestionModel? data) {
+  static questionItem(
+    QuestionModel? data, {
+    ValueChanged<QuestionModel?>? onTapDelete,
+    ValueChanged<QuestionModel?>? onTapEdit,
+  }) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       padding: const EdgeInsets.all(5),
@@ -46,11 +50,21 @@ class QuestionComponent {
               children: [
                 Container(
                   color: Colors.transparent,
-                  child: const Icon(Icons.delete),
+                  child: GestureDetector(
+                    onTap: () {
+                      onTapDelete!(data);
+                    },
+                    child: const Icon(Icons.delete),
+                  ),
                 ),
                 Container(
                   color: Colors.transparent,
-                  child: const Icon(Icons.edit),
+                  child: GestureDetector(
+                    onTap: () {
+                      onTapEdit!(data);
+                    },
+                    child: const Icon(Icons.edit),
+                  ),
                 ),
               ],
             ),

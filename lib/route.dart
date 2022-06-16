@@ -6,6 +6,7 @@ import 'package:suzuki/view/main_menu.dart';
 import 'package:unicons/unicons.dart';
 import 'package:suzuki/view/under_construction_view.dart';
 import 'package:suzuki/view/form_designer_view.dart';
+import 'package:suzuki/view/data_collection_view.dart';
 
 String initialRouteName = RouteName.login;
 
@@ -60,6 +61,8 @@ Map<String, WidgetBuilder> route = {
         switch (menu?.id) {
           case RouteName.formDesigner:
             return const FormDesignerView();
+          case RouteName.datacollection:
+            return const DataCollectionView();
           default:
             return UnderConstructionView();
         }

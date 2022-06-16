@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:suzuki/util/system.dart';
 
@@ -147,12 +148,12 @@ class CircularLoaderComponent extends StatelessWidget {
   }
 
   Widget messageError() {
+    controller.value.message ?? "Error";
     return Align(
       alignment: Alignment.center,
       child: Container(
         margin: const EdgeInsets.only(left: 40, right: 40),
         padding: const EdgeInsets.all(15),
-        height: 150,
         width: 400,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -168,23 +169,35 @@ class CircularLoaderComponent extends StatelessWidget {
             )
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Icon(
-              FontAwesomeIcons.timesCircle,
-              color: Colors.red,
-              size: 50,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              controller.value.message ?? "Error",
-              textAlign: TextAlign.center,
-            )
-          ],
+        child: IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Icon(
+                FontAwesomeIcons.timesCircle,
+                color: Colors.red,
+                size: 50,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              !controller.value.message!.contains("<div")
+                  ? Text(
+                      controller.value.message ?? "Error",
+                      textAlign: TextAlign.center,
+                    )
+                  : Container(
+                      height: 300,
+                      color: Colors.transparent,
+                      child: SingleChildScrollView(
+                        child: Html(
+                          data: controller.value.message,
+                        ),
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );

@@ -10,6 +10,7 @@ class InputComponent {
     String? hint,
     bool obscureText = false,
     TextInputType? keyboardType,
+    bool isValid = false,
   }) {
     return TextField(
       controller: controller ?? TextEditingController(),
@@ -25,6 +26,13 @@ class InputComponent {
             Radius.circular(5),
           ),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: isValid == true
+                ? const Color(0xFF000000)
+                : System.data.color!.dangerColor,
+          ),
+        ),
       ),
     );
   }
@@ -35,9 +43,9 @@ class InputComponent {
     bool obscureText = false,
     TextInputType? keyboardType,
     String? capTitle,
+    bool? isValid = true,
   }) {
     return Container(
-      color: Colors.transparent,
       padding: const EdgeInsets.all(5),
       child: IntrinsicHeight(
         child: Column(
@@ -57,6 +65,7 @@ class InputComponent {
                   hint: hint,
                   obscureText: obscureText,
                   keyboardType: keyboardType,
+                  isValid: isValid!,
                 ),
               ),
             )
@@ -73,6 +82,7 @@ class InputComponent {
     WidgetFromDataBuilder<T?>? selectedBuilder,
     required Future<List<T?>?>? dataSource,
     required WidgetFromDataBuilder<T?>? itemBuilder,
+    bool isValid = true,
   }) {
     return Container(
       color: Colors.transparent,
@@ -109,8 +119,10 @@ class InputComponent {
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                          color: Colors.grey.shade400,
-                        ),
+                            color: isValid
+                                ? Colors.black
+                                : System.data.color!.dangerColor,
+                            width: 0.5),
                         borderRadius: const BorderRadius.all(
                           Radius.circular(5),
                         ),

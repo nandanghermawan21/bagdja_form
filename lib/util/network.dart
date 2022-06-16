@@ -8,6 +8,7 @@ import 'package:suzuki/util/system.dart';
 class Network {
   static Future<dynamic> post({
     required Uri url,
+    Map<String, String>? querys,
     String? relativeUrl = "",
     Map<String, dynamic>? body,
     Encoding? encoding,
@@ -25,9 +26,27 @@ class Network {
       "Access-Control_Allow_Origin": "*",
     });
 
+    Map<String, String> newQuery = {};
+    if (url.hasQuery) {
+      newQuery.addAll(url.queryParameters);
+    }
+    if (querys != null && querys.isNotEmpty) {
+      newQuery.addAll(querys);
+    }
+
+    Uri uri = Uri(
+      fragment: url.fragment,
+      scheme: url.scheme,
+      host: url.host,
+      path: url.path,
+      port: url.port,
+      queryParameters: newQuery,
+      userInfo: url.userInfo,
+    );
+
     return http
         .post(
-      url,
+      uri,
       body: json.encode(body),
       // encoding: encoding ?? Encoding.getByName("apliaction/json"),
       headers: newHeaders,
@@ -35,6 +54,8 @@ class Network {
         .then(
       (http.Response response) {
         try {
+          debugPrint("GET ${url.toString()}");
+          debugPrint("response ${response.body}");
           return handleResponse(
             response,
             otpRequired: otpRequired,
@@ -49,6 +70,7 @@ class Network {
 
   static Future<dynamic> get({
     required Uri url,
+    Map<String, String>? querys,
     String? relativeUrl = "",
     Encoding? encoding,
     Map<String, String>? headers,
@@ -66,14 +88,32 @@ class Network {
       'Access-Control-Allow-Methods': 'POST, GET, DELETE, HEAD, OPTIONS',
     });
 
+    Map<String, String> newQuery = {};
+    if (url.hasQuery) {
+      newQuery.addAll(url.queryParameters);
+    }
+    if (querys != null && querys.isNotEmpty) {
+      newQuery.addAll(querys);
+    }
+
+    Uri uri = Uri(
+      fragment: url.fragment,
+      scheme: url.scheme,
+      host: url.host,
+      path: url.path,
+      port: url.port,
+      queryParameters: newQuery,
+      userInfo: url.userInfo,
+    );
+
     return http
         .get(
-      url,
+      uri,
       headers: newHeaders,
     )
         .then(
       (http.Response response) {
-        debugPrint("POST ${url.toString()}");
+        debugPrint("GET ${url.toString()}");
         debugPrint("response ${response.body}");
         try {
           return handleResponse(

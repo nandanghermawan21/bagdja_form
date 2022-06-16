@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:suzuki/model/menu_model.dart';
 import 'package:suzuki/util/system.dart';
 
 class BasicComponent {
@@ -85,6 +86,46 @@ class BasicComponent {
   static Widget logoHorizontal() {
     return SvgPicture.asset(
       "assets/kogo_suzuki_mobile_survey_horizontal.svg",
+    );
+  }
+
+  static Widget panelHeader({
+    String? title,
+    List<MenuModel> actions = const [],
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
+      color: System.data.color!.primaryColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "$title",
+            style: System.data.textStyle!.boldTitleLabel.copyWith(
+              color: System.data.color!.lightTextColor,
+            ),
+          ),
+          Center(
+            child: Row(
+              children: List.generate(
+                actions.length,
+                (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      actions[index].onTap!();
+                    },
+                    child: Icon(
+                      actions[index].iconData ?? Icons.add,
+                      color: System.data.color!.lightTextColor,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

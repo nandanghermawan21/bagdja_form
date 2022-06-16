@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -82,12 +81,60 @@ class QuestionModel {
         System.data.apiEndPoint.url + System.data.apiEndPoint.questionAddUrl,
       ),
       headers: {
-        HttpHeaders.authorizationHeader: "bearer $token",
+        HttpHeaders.authorizationHeader: "$token",
       },
       otpRequired: null,
-      body: questionModel?.toJson() ?? {},
+      body: (questionModel?.toJson() ?? {})..remove("id"),
     ).then((value) {
-      return value == null ? null : QuestionModel.fronJson(json.decode(value));
+      return value == null ? null : QuestionModel.fronJson((value));
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
+
+  static Future<QuestionModel?> delete({
+    required String? token,
+    required int? id,
+  }) {
+    return Network.get(
+      url: Uri.parse(
+        System.data.apiEndPoint.url + System.data.apiEndPoint.questionDeleteUrl,
+      ),
+      querys: {
+        "id": "${id ?? ""}",
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: "$token",
+      },
+      otpRequired: null,
+    ).then((value) {
+      return value == null ? null : QuestionModel.fronJson(value);
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
+
+  static Future<QuestionModel?> update({
+    required String? token,
+    required int? id,
+    required QuestionModel? questionModel,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url + System.data.apiEndPoint.questionUpdateUrl,
+      ),
+      querys: {"id": "${id ?? ""}"},
+      headers: {
+        HttpHeaders.authorizationHeader: "$token",
+      },
+      otpRequired: null,
+      body: (questionModel?.toJson() ?? {})..remove("id"),
+    ).then((value) {
+      return value == null ? null : QuestionModel.fronJson((value));
     }).catchError(
       (onError) {
         throw onError;
@@ -106,4 +153,14 @@ class QuestionTypes {
   static const String positiontag = "positiontag";
   static const String text = "text";
   static const String video = "video";
+
+  static bool needCollectionData(String code) {
+    switch (code) {
+      case QuestionTypes.dropdown:
+      case QuestionTypes.checkbox:
+        return true;
+      default:
+        return false;
+    }
+  }
 }

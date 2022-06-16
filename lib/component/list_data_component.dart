@@ -217,6 +217,7 @@ class ListDataComponent<T> extends StatelessWidget {
       },
       child: ListView(
         controller: controller?.value.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         children: List.generate(
           (controller?.value.data.length ?? 0) +
               (controller?.value.state == ListDataComponentState.loading
