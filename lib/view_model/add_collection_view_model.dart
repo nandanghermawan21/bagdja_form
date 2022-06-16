@@ -15,6 +15,10 @@ class AddCollectionVewModel extends ChangeNotifier {
     nameController.text = collectionModel?.name ?? "";
   }
 
+  void clear() {
+    nameController.text = "";
+  }
+
   bool? validateName() {
     if (nameController.text != "") {
       isValidName = true;
@@ -73,7 +77,10 @@ class AddCollectionVewModel extends ChangeNotifier {
       ),
     ).then((value) {
       loadingController.stopLoading(
-          message: "Create Collection Success", onCloseCallBack: () {});
+          message: "Create Collection Success",
+          onCloseCallBack: () {
+            clear();
+          });
     }).catchError((onError) {
       loadingController.stopLoading(
         message: ErrorHandlingUtil.handleApiError(onError),

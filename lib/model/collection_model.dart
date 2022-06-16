@@ -102,7 +102,7 @@ class CollectionModel {
     );
   }
 
-  static Future<List<CollectionModel?>> delete({
+  static Future<CollectionModel?> delete({
     required String? token,
     int? id,
   }) {
@@ -119,11 +119,7 @@ class CollectionModel {
         HttpHeaders.authorizationHeader: "$token",
       },
     ).then((value) {
-      if (value == null) {
-        return <CollectionModel>[];
-      } else {
-        return (value as List).map((e) => CollectionModel.fromJson(e)).toList();
-      }
+      return value == null ? null : CollectionModel.fromJson((value));
     }).catchError(
       (onError) {
         throw onError;

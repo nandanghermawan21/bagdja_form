@@ -10,7 +10,7 @@ class InputComponent {
     String? hint,
     bool obscureText = false,
     TextInputType? keyboardType,
-    bool isValid = false,
+    bool isValid = true,
   }) {
     return TextField(
       controller: controller ?? TextEditingController(),
@@ -119,7 +119,7 @@ class InputComponent {
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
-                            color: isValid
+                            color: isValid == true
                                 ? Colors.black
                                 : System.data.color!.dangerColor,
                             width: 0.5),
