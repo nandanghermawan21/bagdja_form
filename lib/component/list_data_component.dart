@@ -10,22 +10,24 @@ class ListDataComponent<T> extends StatelessWidget {
   final ListDataComponentController<T>? controller;
   final WidgetFromDataBuilder2Param<T?, int>? itemBuilder;
   final FutureObjectBuilderWith2Param<List<T>, int, String?>? dataSource;
-  final ValueChanged2Param<List<T>, String?>? onDateReceived;
+  final ValueChanged2Param<List<T>, String?>? onDataReceived;
   final bool showSearchBox;
   final String? seachHist;
   final ListDataComponentMode listViewMOde;
   final Widget? header;
+  final ValueChanged<T?>? onSelected;
 
   const ListDataComponent({
     Key? key,
     this.controller,
     this.itemBuilder,
     this.dataSource,
-    this.onDateReceived,
+    this.onDataReceived,
     this.showSearchBox = false,
     this.seachHist,
     this.listViewMOde = ListDataComponentMode.listView,
     this.header,
+    this.onSelected,
   }) : super(
           key: key,
         );
@@ -34,7 +36,8 @@ class ListDataComponent<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     if (controller?.value.state == ListDataComponentState.firstLoad) {
       controller?.value.dataSource = dataSource;
-      controller?.value.onDateReceived = onDateReceived;
+      controller?.value.onDataReceived = onDataReceived;
+      controller?.value.onSelected = onSelected;
       controller?.refresh();
     }
     return Container(
@@ -162,7 +165,17 @@ class ListDataComponent<T> extends StatelessWidget {
               (index) {
                 if (itemBuilder != null) {
                   if (index < (controller?.value.data.length ?? -1)) {
-                    return itemBuilder!(controller?.value.data[index], index);
+                    return GestureDetector(
+                      onTap: () {
+                        controller?.value.selected =
+                            controller?.value.data[index];
+                        controller?.commit();
+                        if (onSelected != null) {
+                          onSelected!(controller?.value.data[index]);
+                        }
+                      },
+                      child: itemBuilder!(controller?.value.data[index], index),
+                    );
                   } else {
                     return loader();
                   }
@@ -229,7 +242,16 @@ class ListDataComponent<T> extends StatelessWidget {
           (index) {
             if (itemBuilder != null) {
               if (index < (controller?.value.data.length ?? -1)) {
-                return itemBuilder!(controller?.value.data[index], index);
+                return GestureDetector(
+                  onTap: () {
+                    controller?.value.selected = controller?.value.data[index];
+                    controller?.commit();
+                    if (onSelected != null) {
+                      onSelected!(controller?.value.data[index]);
+                    }
+                  },
+                  child: itemBuilder!(controller?.value.data[index], index),
+                );
               } else {
                 return loader();
               }
@@ -244,6 +266,7 @@ class ListDataComponent<T> extends StatelessWidget {
 
   Widget loader() {
     return SkeletonAnimation(
+      shimmerColor: Colors.grey.shade100,
       child: itemBuilder != null ? itemBuilder!(null, 0) : emptyItem(),
     );
   }
@@ -317,6 +340,7 @@ class ListDataComponentController<T>
 
   void refresh() {
     value.state = ListDataComponentState.loading;
+    value.data = [];
     commit();
     if (value.dataSource == null) {
       value.state = ListDataComponentState.loaded;
@@ -325,10 +349,11 @@ class ListDataComponentController<T>
     }
     value.dataSource!(0, value.searchController.text).then((datas) {
       value.data = (datas);
-      if (value.onDateReceived != null) {
-        value.onDateReceived!(datas, value.searchController.text);
+      if (value.onDataReceived != null) {
+        value.onDataReceived!(datas, value.searchController.text);
       }
       value.state = ListDataComponentState.loaded;
+      setSelectedData();
       commit();
     }).catchError(
       (onError) {
@@ -350,15 +375,17 @@ class ListDataComponentController<T>
     commit();
     if (value.dataSource == null) {
       value.state = ListDataComponentState.loaded;
+      value.selected ??= value.data.first;
       commit();
       return;
     }
     value.dataSource!(total, value.searchController.text).then((datas) {
       value.data.addAll(datas);
-      if (value.onDateReceived != null) {
-        value.onDateReceived!(datas, value.searchController.text);
+      if (value.onDataReceived != null) {
+        value.onDataReceived!(datas, value.searchController.text);
       }
       value.state = ListDataComponentState.loaded;
+      setSelectedData();
       commit();
       try {
         value.scrollController.jumpTo(_latPosition);
@@ -374,6 +401,15 @@ class ListDataComponentController<T>
     );
   }
 
+  void setSelectedData() {
+    if (value.data.isNotEmpty) {
+      value.selected ??= value.data.first;
+      if (value.onSelected != null) {
+        value.onSelected!(value.selected);
+      }
+    }
+  }
+
   int get total {
     return value.data.length;
   }
@@ -385,12 +421,14 @@ class ListDataComponentController<T>
 
 class ListDataComponentValue<T> {
   List<T> data = [];
+  T? selected;
   ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
   int totalAllData = 0;
   ListDataComponentState state = ListDataComponentState.firstLoad;
   FutureObjectBuilderWith2Param<List<T>, int, String?>? dataSource;
-  ValueChanged2Param<List<T>, String?>? onDateReceived;
+  ValueChanged2Param<List<T>, String?>? onDataReceived;
+  ValueChanged<T?>? onSelected;
   String? errorMessage;
 }
 

@@ -58,4 +58,83 @@ class CollectionDataModel {
       },
     );
   }
+
+  static Future<CollectionDataModel?> add({
+    required String? token,
+    required CollectionDataModel? collectionDataModel,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url +
+            System.data.apiEndPoint.collectionAddDataUrl,
+      ),
+      headers: {
+        HttpHeaders.authorizationHeader: "$token",
+      },
+      otpRequired: null,
+      body: (collectionDataModel?.toJson() ?? {}),
+    ).then((value) {
+      return value == null ? null : CollectionDataModel.fromJson((value));
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
+
+  static Future<CollectionDataModel?> update({
+    required String? token,
+    required int? id,
+    required String? value,
+    required CollectionDataModel? collectionDataModel,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url +
+            System.data.apiEndPoint.collectionUpdateDataUrl,
+      ),
+      querys: {
+        "id": "${id ?? ""}",
+        "value": value ?? "",
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: "$token",
+      },
+      otpRequired: null,
+      body: (collectionDataModel?.toJson() ?? {}),
+    ).then((value) {
+      return value == null ? null : CollectionDataModel.fromJson((value));
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
+
+  static Future<CollectionDataModel?> delete({
+    required String? token,
+    required int? id,
+    required String? value,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url +
+            System.data.apiEndPoint.collectionDeleteDataUrl,
+      ),
+      querys: {
+        "id": "${id ?? ""}",
+        "value": value ?? "",
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: "$token",
+      },
+      otpRequired: null,
+    ).then((value) {
+      return value == null ? null : CollectionDataModel.fromJson((value));
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
 }

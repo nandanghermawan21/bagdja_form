@@ -17,8 +17,11 @@ class ApiEndPoint {
   String collectionListUrl = "collection/list";
   String collectioCreateUrl = "collection/create";
   String collectioDeleteUrl = "collection/delete";
-  String collectioupdateUrl = "collection/update";
+  String collectionupdateUrl = "collection/update";
   String collectionDataUrl = "collection/data";
+  String collectionAddDataUrl = "collection/addData";
+  String collectionUpdateDataUrl = "collection/updateData";
+  String collectionDeleteDataUrl = "collection/deleteData";
   //collection
 
   String get url {

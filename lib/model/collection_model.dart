@@ -85,7 +85,7 @@ class CollectionModel {
     return Network.post(
       url: Uri.parse(
         System.data.apiEndPoint.url +
-            System.data.apiEndPoint.collectioupdateUrl,
+            System.data.apiEndPoint.collectionupdateUrl,
       ),
       querys: {"id": "${id ?? ""}"},
       headers: {
