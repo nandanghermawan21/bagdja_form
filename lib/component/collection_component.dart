@@ -63,6 +63,8 @@ class CollectionComponent {
   static Widget collectionItem(
     CollectionModel? data, {
     List<MenuModel> action = const [],
+    Color? backgroundColor,
+    Color? textColor,
   }) {
     return Container(
       width: double.infinity,
@@ -70,7 +72,7 @@ class CollectionComponent {
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: backgroundColor ?? Colors.white,
           border: Border.all(
             color: Colors.black,
             width: 0.5,
@@ -81,18 +83,26 @@ class CollectionComponent {
         children: [
           Text(
             "${data?.id ?? ""} ${data?.name ?? ""}",
-            style: System.data.textStyle!.boldTitleLabel,
+            style: System.data.textStyle!.boldTitleLabel.copyWith(
+              color: textColor,
+            ),
           ),
           Row(
-            children: List.generate(action.length, (index) {
-              return Container(
-                color: Colors.transparent,
-                child: GestureDetector(
-                  onTap: action[index].onTap,
-                  child: Icon(action[index].iconData),
-                ),
-              );
-            }),
+            children: List.generate(
+              action.length,
+              (index) {
+                return Container(
+                  color: Colors.transparent,
+                  child: GestureDetector(
+                    onTap: action[index].onTap,
+                    child: Icon(
+                      action[index].iconData,
+                      color: action[index].color,
+                    ),
+                  ),
+                );
+              },
+            ),
           )
         ],
       ),

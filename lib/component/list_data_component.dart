@@ -14,17 +14,19 @@ class ListDataComponent<T> extends StatelessWidget {
   final bool showSearchBox;
   final String? seachHist;
   final ListDataComponentMode listViewMOde;
+  final Widget? header;
 
-  const ListDataComponent(
-      {Key? key,
-      this.controller,
-      this.itemBuilder,
-      this.dataSource,
-      this.onDateReceived,
-      this.showSearchBox = false,
-      this.seachHist,
-      this.listViewMOde = ListDataComponentMode.listView})
-      : super(
+  const ListDataComponent({
+    Key? key,
+    this.controller,
+    this.itemBuilder,
+    this.dataSource,
+    this.onDateReceived,
+    this.showSearchBox = false,
+    this.seachHist,
+    this.listViewMOde = ListDataComponentMode.listView,
+    this.header,
+  }) : super(
           key: key,
         );
 
@@ -44,6 +46,7 @@ class ListDataComponent<T> extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               showSearchBox ? searchBox() : const SizedBox(),
+              header != null ? header! : const SizedBox(),
               listViewMOde == ListDataComponentMode.listView
                   ? Expanded(child: childBuilder())
                   : childBuilder(),

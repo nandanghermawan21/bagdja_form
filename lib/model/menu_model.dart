@@ -7,6 +7,7 @@ class MenuModel {
   String? iconImage;
   Widget? icon;
   IconData? iconData;
+  Color? color;
 
   MenuModel({
     this.id,
@@ -15,5 +16,6 @@ class MenuModel {
     this.icon,
     this.title,
     this.iconData,
+    this.color,
   });
 }

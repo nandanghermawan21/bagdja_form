@@ -9,6 +9,7 @@ class DataCollectionViewModel extends ChangeNotifier {
   CircularLoaderController loadingController = CircularLoaderController();
   ListDataComponentController<CollectionModel?> collectionListController =
       ListDataComponentController<CollectionModel?>();
+  CollectionModel? sellectionSelected;
 
   void deleteCollection(CollectionModel? data) {
     loadingController.startLoading();
