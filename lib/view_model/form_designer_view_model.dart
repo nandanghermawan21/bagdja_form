@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
+import 'package:suzuki/model/question_group_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
@@ -9,6 +10,8 @@ class FormDesignerViewMOdel extends ChangeNotifier {
   CircularLoaderController loadingController = CircularLoaderController();
   ListDataComponentController<QuestionModel?> questionController =
       ListDataComponentController<QuestionModel?>();
+  ListDataComponentController<QuestionGroupModel?> questionGroupController =
+      ListDataComponentController<QuestionGroupModel?>();
 
   void deleteQuestion(QuestionModel? data) {
     loadingController.startLoading();

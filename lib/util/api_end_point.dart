@@ -24,6 +24,17 @@ class ApiEndPoint {
   String collectionDeleteDataUrl = "collection/deleteData";
   //collection
 
+  //questiongroup
+  String questionGroupListUrl = "questiongroup/list";
+  String questionGroupCreateUrl = "questiongroup/create";
+  String questionGroupUpdateUrl = "questiongroup/update";
+  String questionGroupDeleteUrl = "questiongroup/delete";
+  String questionGroupDataUrl = "questiongroup/data";
+  String questionGroupAddDataUrl = "questiongroup/addData";
+  String questionGroupUpdateDataUrl = "questiongroup/updateData";
+  String questionGroupDeleteDataUrl = "questiongroup/deleteData";
+  //questiongroup
+
   String get url {
     if (ModeUtil.debugMode == true) {
       return baseUrlDebug;

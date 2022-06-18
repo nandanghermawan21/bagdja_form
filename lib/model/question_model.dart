@@ -5,13 +5,13 @@ import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
 
 class QuestionModel {
-  final int? id; //": 1,
-  final String? code; //": "0001",
-  final String? name; //": null,
-  final String? label; //": "Nama",
-  final String? hint; //": "Nama",
-  final String? type; //": "text",
-  final int? collectionId; //": null
+  int? id; //": 1,
+  String? code; //": "0001",
+  String? name; //": null,
+  String? label; //": "Nama",
+  String? hint; //": "Nama",
+  String? type; //": "text",
+  int? collectionId; //": null
 
   QuestionModel({
     this.id,
@@ -23,8 +23,11 @@ class QuestionModel {
     this.collectionId,
   });
 
-  static QuestionModel fronJson(Map<String, dynamic> json) {
-    return QuestionModel(
+  static QuestionModel fronJson(
+    Map<String, dynamic> json, {
+    int? id,
+  }) {
+    var data = QuestionModel(
       id: (json["id"] as num?)?.toInt(),
       code: (json["code"] as String?),
       name: (json["name"] as String?),
@@ -33,6 +36,12 @@ class QuestionModel {
       type: (json["type"] as String?),
       collectionId: (json["collection_id"] as num?)?.toInt(),
     );
+
+    if (id != null) {
+      data.id = id;
+    }
+
+    return data;
   }
 
   Map<String, dynamic> toJson() {

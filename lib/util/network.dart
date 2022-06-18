@@ -54,7 +54,7 @@ class Network {
         .then(
       (http.Response response) {
         try {
-          debugPrint("GET ${url.toString()}");
+          debugPrint("POST ${uri.toString()}");
           debugPrint("response ${response.body}");
           return handleResponse(
             response,
@@ -113,7 +113,7 @@ class Network {
     )
         .then(
       (http.Response response) {
-        debugPrint("GET ${url.toString()}");
+        debugPrint("GET ${uri.toString()}");
         debugPrint("response ${response.body}");
         try {
           return handleResponse(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:suzuki/component/list_data_component.dart';
+import 'package:suzuki/model/question_group_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/model/question_types_model.dart';
 import 'package:suzuki/util/system.dart';
@@ -8,7 +9,9 @@ import 'package:suzuki/util/system.dart';
 class QuestionComponent {
   static questionItem(
     QuestionModel? data, {
+    bool showDelete = true,
     ValueChanged<QuestionModel?>? onTapDelete,
+    bool showEdit = true,
     ValueChanged<QuestionModel?>? onTapEdit,
   }) {
     return Container(
@@ -40,6 +43,85 @@ class QuestionComponent {
                 style: System.data.textStyle!.basicLabel,
               ),
             ),
+          ),
+          Container(
+            width: 50,
+            height: 30,
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                showDelete != true
+                    ? const SizedBox()
+                    : Container(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                          onTap: () {
+                            onTapDelete!(data);
+                          },
+                          child: const Icon(Icons.delete),
+                        ),
+                      ),
+                showEdit != true
+                    ? const SizedBox()
+                    : Container(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                          onTap: () {
+                            onTapEdit!(data);
+                          },
+                          child: const Icon(Icons.edit),
+                        ),
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static questionGroupItem(
+    QuestionGroupModel? data, {
+    ValueChanged<QuestionGroupModel?>? onTapDelete,
+    ValueChanged<QuestionGroupModel?>? onTapEdit,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 0),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.black,
+          style: BorderStyle.solid,
+          width: 0.5,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 20,
+            color: Colors.transparent,
+            child: const Icon(
+              FontAwesomeIcons.chevronDown,
+              size: 10,
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.transparent,
+              child: Text(
+                "${data?.code ?? ""} ${data?.name ?? ""}",
+                style: System.data.textStyle!.basicLabel,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 5,
           ),
           Container(
             width: 50,

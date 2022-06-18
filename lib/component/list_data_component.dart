@@ -9,6 +9,7 @@ import 'package:suzuki/util/type.dart';
 class ListDataComponent<T> extends StatelessWidget {
   final ListDataComponentController<T>? controller;
   final WidgetFromDataBuilder2Param<T?, int>? itemBuilder;
+  final Widget? emptyWidget;
   final FutureObjectBuilderWith2Param<List<T>, int, String?>? dataSource;
   final ValueChanged2Param<List<T>, String?>? onDataReceived;
   final bool showSearchBox;
@@ -16,6 +17,7 @@ class ListDataComponent<T> extends StatelessWidget {
   final ListDataComponentMode listViewMOde;
   final Widget? header;
   final ValueChanged<T?>? onSelected;
+  final bool enableGetMore;
 
   const ListDataComponent({
     Key? key,
@@ -28,6 +30,8 @@ class ListDataComponent<T> extends StatelessWidget {
     this.listViewMOde = ListDataComponentMode.listView,
     this.header,
     this.onSelected,
+    this.emptyWidget,
+    this.enableGetMore = true,
   }) : super(
           key: key,
         );
@@ -185,27 +189,29 @@ class ListDataComponent<T> extends StatelessWidget {
               },
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 5),
-            color: Colors.transparent,
-            child: GestureDetector(
-              onTap: () {
-                controller?.getOther();
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    System.data.strings!.showMore,
+          enableGetMore != true
+              ? const SizedBox()
+              : Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  color: Colors.transparent,
+                  child: GestureDetector(
+                    onTap: () {
+                      controller?.getOther();
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          System.data.strings!.showMore,
+                        ),
+                        const Icon(
+                          FontAwesomeIcons.chevronDown,
+                          size: 15,
+                        )
+                      ],
+                    ),
                   ),
-                  const Icon(
-                    FontAwesomeIcons.chevronDown,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-          ),
+                ),
         ],
       ),
     );
@@ -226,7 +232,7 @@ class ListDataComponent<T> extends StatelessWidget {
                       ?.value.scrollController.position.userScrollDirection ==
                   ScrollDirection.reverse &&
               ((current ?? 0) >= (max ?? 0))) {
-            controller?.getOther();
+            if (enableGetMore == true) controller?.getOther();
           }
         }
         return true;
@@ -305,26 +311,27 @@ class ListDataComponent<T> extends StatelessWidget {
   }
 
   Widget emptyData() {
-    return Container(
-      color: Colors.transparent,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            FontAwesomeIcons.database,
-            size: 50,
+    return emptyWidget ??
+        Container(
+          color: Colors.transparent,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                FontAwesomeIcons.database,
+                size: 50,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "tidak ada data",
+                style: System.data.textStyle!.basicLabel,
+              )
+            ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "tidak ada data",
-            style: System.data.textStyle!.basicLabel,
-          )
-        ],
-      ),
-    );
+        );
   }
 }
 

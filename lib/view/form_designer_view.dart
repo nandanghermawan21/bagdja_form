@@ -4,8 +4,11 @@ import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
 import 'package:suzuki/component/question_component.dart';
 import 'package:suzuki/model/menu_model.dart';
+import 'package:suzuki/model/question_group_model.dart';
+import 'package:suzuki/model/question_list_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/util/system.dart';
+import 'package:suzuki/view/add_question_group_view.dart';
 import 'package:suzuki/view/add_question_view.dart';
 import 'package:suzuki/view_model/form_designer_view_model.dart';
 
@@ -40,7 +43,7 @@ class FormDesignerViewState extends State<FormDesignerView> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.green,
+                  child: questionGroup(),
                 ),
               ),
               Expanded(
@@ -93,6 +96,86 @@ class FormDesignerViewState extends State<FormDesignerView> {
     );
   }
 
+  Widget questionGroup() {
+    return Column(
+      children: [
+        Container(
+          color: Colors.transparent,
+          width: double.infinity,
+          child: BasicComponent.panelHeader(title: "Question Group", actions: [
+            MenuModel(
+              iconData: Icons.add,
+              onTap: () {
+                edituestionGroup();
+              },
+            )
+          ]),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.transparent,
+            child: ListDataComponent<QuestionGroupModel?>(
+              controller: formDesignerViewModel.questionGroupController,
+              dataSource: (skip, search) {
+                return QuestionGroupModel.list(
+                  token: System.data.global.token,
+                );
+              },
+              itemBuilder: (data, index) {
+                return Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      QuestionComponent.questionGroupItem(
+                        data,
+                        // onTapDelete: formDesignerViewModel.deleteQuestion,
+                        onTapEdit: edituestionGroup,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            left: 10, right: 10, top: 0, bottom: 5),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          color: Colors.black,
+                        )),
+                        child: ListDataComponent<QuestionListModel?>(
+                          controller:
+                              ListDataComponentController<QuestionListModel?>(),
+                          listViewMOde: ListDataComponentMode.column,
+                          enableGetMore: false,
+                          emptyWidget: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              "Drag question here",
+                              style: System.data.textStyle!.basicLabel,
+                            ),
+                          ),
+                          dataSource: (skipList, search) {
+                            return QuestionListModel.list(
+                              token: System.data.global.token,
+                              questionGroupId: data?.id,
+                            );
+                          },
+                          itemBuilder: (dataList, index) {
+                            return QuestionComponent.questionItem(
+                              dataList?.question,
+                              showEdit: false,
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
   Future<void> edituestions([QuestionModel? questionModel]) {
     double width = MediaQuery.of(context).size.width;
     return showDialog(
@@ -112,6 +195,28 @@ class FormDesignerViewState extends State<FormDesignerView> {
       },
     ).then((value) {
       formDesignerViewModel.questionController.refresh();
+    });
+  }
+
+  Future<void> edituestionGroup([QuestionGroupModel? questionGroupModel]) {
+    double width = MediaQuery.of(context).size.width;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (contex) {
+        return Align(
+          alignment: Alignment.center,
+          child: Card(
+            elevation: 3,
+            child: AddQuestionGroupView(
+              width: (width * 30 / 100) > 500 ? (width * 30 / 100) : 500,
+              questionGroupModel: questionGroupModel,
+            ),
+          ),
+        );
+      },
+    ).then((value) {
+      formDesignerViewModel.questionGroupController.refresh();
     });
   }
 }
