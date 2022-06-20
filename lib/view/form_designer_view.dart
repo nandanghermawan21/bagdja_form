@@ -89,6 +89,25 @@ class FormDesignerViewState extends State<FormDesignerView> {
                     onTapDelete: formDesignerViewModel.deleteQuestion,
                     onTapEdit: edituestions);
               },
+              dragFeedbackBuilder: (data, index) {
+                return Container(
+                  width: 200,
+                  color: Colors.transparent,
+                  child: QuestionComponent.questionItem(
+                    data,
+                    showDelete: false,
+                    showEdit: false,
+                  ),
+                );
+              },
+              dragDataBuilder: (data, index) {
+                return QuestionListModel(
+                  groupId: -1,
+                  questionId: data?.id,
+                  order: -1,
+                  question: data,
+                );
+              },
             ),
           ),
         )
@@ -122,50 +141,92 @@ class FormDesignerViewState extends State<FormDesignerView> {
                 );
               },
               itemBuilder: (data, index) {
+                formDesignerViewModel.questionListOfGroup["${data?.id}"] =
+                    ListDataComponentController<QuestionListModel?>();
                 return Container(
                   color: Colors.transparent,
-                  child: Column(
-                    children: [
-                      QuestionComponent.questionGroupItem(
-                        data,
-                        // onTapDelete: formDesignerViewModel.deleteQuestion,
-                        onTapEdit: edituestionGroup,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            left: 10, right: 10, top: 0, bottom: 5),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Colors.black,
-                        )),
-                        child: ListDataComponent<QuestionListModel?>(
-                          controller:
-                              ListDataComponentController<QuestionListModel?>(),
-                          listViewMOde: ListDataComponentMode.column,
-                          enableGetMore: false,
-                          emptyWidget: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(5),
-                            child: Text(
-                              "Drag question here",
-                              style: System.data.textStyle!.basicLabel,
-                            ),
-                          ),
-                          dataSource: (skipList, search) {
-                            return QuestionListModel.list(
-                              token: System.data.global.token,
-                              questionGroupId: data?.id,
-                            );
-                          },
-                          itemBuilder: (dataList, index) {
-                            return QuestionComponent.questionItem(
-                              dataList?.question,
-                              showEdit: false,
-                            );
-                          },
+                  child: Center(
+                    child: Column(
+                      children: [
+                        QuestionComponent.questionGroupItem(
+                          data,
+                          // onTapDelete: formDesignerViewModel.deleteQuestion,
+                          onTapEdit: edituestionGroup,
                         ),
-                      )
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(
+                              left: 10, right: 10, top: 0, bottom: 5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            color: Colors.black,
+                          )),
+                          child: ListDataComponent<QuestionListModel?>(
+                            controller: formDesignerViewModel
+                                .questionListOfGroup["${data?.id}"],
+                            listViewMOde: ListDataComponentMode.column,
+                            enableGetMore: false,
+                            emptyWidget: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Drag question here",
+                                style: System.data.textStyle!.basicLabel,
+                              ),
+                            ),
+                            dataSource: (skipList, search) {
+                              return QuestionListModel.list(
+                                token: System.data.global.token,
+                                questionGroupId: data?.id,
+                              );
+                            },
+                            itemBuilder: (dataList, index) {
+                              return QuestionComponent.questionItem(
+                                dataList?.question,
+                                showEdit: false,
+                                onTapDelete: (qs) {
+                                  formDesignerViewModel
+                                      .deleteQuestionFromQuestionGroup(
+                                          dataList);
+                                },
+                              );
+                            },
+                            onWillReceiveDropedData: (dropedData, index) {
+                              if (dropedData?.groupId == data?.id ||
+                                  dropedData?.groupId == -1) {
+                                return true;
+                              } else {
+                                return false;
+                              }
+                            },
+                            onReceiveDropedData: (dropedData, index) {
+                              dropedData?.groupId = data?.id;
+                              formDesignerViewModel
+                                  .updateQuestionOnQuestionGroup(
+                                data: dropedData,
+                                controller: formDesignerViewModel
+                                    .questionListOfGroup["${data?.id}"],
+                                index: index,
+                              );
+                            },
+                            dragFeedbackBuilder: (dataList, index) {
+                              return Container(
+                                width: 200,
+                                color: Colors.transparent,
+                                child: QuestionComponent.questionItem(
+                                  dataList?.question,
+                                  showEdit: false,
+                                  onTapDelete: (qs) {
+                                    formDesignerViewModel
+                                        .deleteQuestionFromQuestionGroup(
+                                            dataList);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

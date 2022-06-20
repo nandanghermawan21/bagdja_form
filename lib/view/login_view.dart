@@ -22,13 +22,13 @@ class LoginView extends StatefulWidget {
 }
 
 class LoginViewState extends State<LoginView> {
-  LoginViewMOdel loginViewMOdel = LoginViewMOdel();
+  LoginViewModel loginViewModel = LoginViewModel();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      loginViewMOdel.chekLogedIn(
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      loginViewModel.chekLogedIn(
         onLOginSuccess: widget.onLoginSuccess,
       );
     });
@@ -50,7 +50,7 @@ class LoginViewState extends State<LoginView> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: CircularLoaderComponent(
-          controller: loginViewMOdel.loadingController,
+          controller: loginViewModel.loadingController,
           child: Stack(
             children: [
               Align(
@@ -85,7 +85,7 @@ class LoginViewState extends State<LoginView> {
                         height: 50,
                         color: Colors.transparent,
                         child: InputComponent.inputText(
-                          controller: loginViewMOdel.usernameController,
+                          controller: loginViewModel.usernameController,
                           hint: System.data.strings!.userName,
                         ),
                       ),
@@ -96,7 +96,7 @@ class LoginViewState extends State<LoginView> {
                         height: 50,
                         color: Colors.transparent,
                         child: InputComponent.inputText(
-                          controller: loginViewMOdel.passwordController,
+                          controller: loginViewModel.passwordController,
                           hint: System.data.strings!.password,
                           obscureText: true,
                         ),
@@ -109,7 +109,7 @@ class LoginViewState extends State<LoginView> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              loginViewMOdel.login(
+                              loginViewModel.login(
                                   onLOginSuccess: widget.onLoginSuccess);
                             },
                             style: ButtonStyle(

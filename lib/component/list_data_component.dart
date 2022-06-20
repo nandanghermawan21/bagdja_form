@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:suzuki/util/error_handling_util.dart';
@@ -18,6 +19,10 @@ class ListDataComponent<T> extends StatelessWidget {
   final Widget? header;
   final ValueChanged<T?>? onSelected;
   final bool enableGetMore;
+  final ObjectBuilderWith2Param<bool, T, int>? onWillReceiveDropedData;
+  final ValueChanged2Param<T, int>? onReceiveDropedData;
+  final WidgetFromDataBuilder2Param<T?, int>? dragFeedbackBuilder;
+  final ObjectBuilderWith2Param<Object, T?, int>? dragDataBuilder;
 
   const ListDataComponent({
     Key? key,
@@ -32,6 +37,10 @@ class ListDataComponent<T> extends StatelessWidget {
     this.onSelected,
     this.emptyWidget,
     this.enableGetMore = true,
+    this.onReceiveDropedData,
+    this.onWillReceiveDropedData,
+    this.dragFeedbackBuilder,
+    this.dragDataBuilder,
   }) : super(
           key: key,
         );
@@ -178,7 +187,7 @@ class ListDataComponent<T> extends StatelessWidget {
                           onSelected!(controller?.value.data[index]);
                         }
                       },
-                      child: itemBuilder!(controller?.value.data[index], index),
+                      child: item(controller?.value.data[index], index),
                     );
                   } else {
                     return loader();
@@ -256,7 +265,7 @@ class ListDataComponent<T> extends StatelessWidget {
                       onSelected!(controller?.value.data[index]);
                     }
                   },
-                  child: itemBuilder!(controller?.value.data[index], index),
+                  child: item(controller?.value.data[index], index),
                 );
               } else {
                 return loader();
@@ -270,6 +279,101 @@ class ListDataComponent<T> extends StatelessWidget {
     );
   }
 
+  Widget item(T? data, int index) {
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          draggable(data, index),
+          Container(
+            color: Colors.transparent,
+            child: Draggable<Object>(
+              dragAnchorStrategy: (drg, obj, offset) {
+                return const Offset(1, 1);
+              },
+              feedback: Material(
+                child: dragFeedBack(data, index),
+              ),
+              data: dragDataBuilder != null
+                  ? dragDataBuilder!(data, index)
+                  : data,
+              child: itemBuilder!(data, index),
+            ),
+          ),
+          index == (controller?.value.data.length ?? 0) - 1
+              ? draggable(data, index + 1)
+              : const SizedBox(),
+        ],
+      ),
+    );
+  }
+
+  Widget draggable(data, index) {
+    return DragTarget<Object>(
+      builder: (c, d, w) {
+        return Container(
+          height: controller?.value.droppedItem != null ? null : 1,
+          width: double.infinity,
+          color: Colors.transparent,
+          child: (controller?.value.droppedItem != null &&
+                  controller?.value.droppedIndexTarget == index &&
+                  controller?.value.droppedItem != data)
+              ? itemBuilder!(controller?.value.droppedItem, -1)
+              : const SizedBox(),
+        );
+      },
+      onMove: (object) {
+        if (object.data is T) {
+          if (controller?.value.droppedItem == (object.data as T)) return;
+          controller?.value.droppedItem = (object.data as T);
+          controller?.value.droppedIndexTarget = index;
+          controller?.commit();
+        }
+      },
+      onLeave: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+      },
+      onWillAccept: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+        if (onWillReceiveDropedData != null) {
+          return onWillReceiveDropedData!((object as T), index);
+        } else {
+          return true;
+        }
+      },
+      onAccept: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+        if (onReceiveDropedData != null) {
+          onReceiveDropedData!((object as T), index);
+        }
+      },
+    );
+  }
+
+  Widget dragFeedBack(T? data, int index) {
+    return dragFeedbackBuilder != null
+        ? dragFeedbackBuilder!(data, index)
+        : Container(
+            height: 30,
+            width: 30,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
+              border: Border.all(
+                color: Colors.black,
+              ),
+            ),
+            child: Center(
+              child: FittedBox(
+                child: Text("$index"),
+              ),
+            ),
+          );
+  }
+
   Widget loader() {
     return SkeletonAnimation(
       shimmerColor: Colors.grey.shade100,
@@ -281,7 +385,7 @@ class ListDataComponent<T> extends StatelessWidget {
     return Container(
       height: 50,
       margin: const EdgeInsets.only(bottom: 5, top: 5),
-      color: Colors.green,
+      color: Colors.transparent,
     );
   }
 
@@ -301,37 +405,86 @@ class ListDataComponent<T> extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Text(
-            controller?.value.errorMessage ?? "",
-            style: System.data.textStyle!.boldTitleDangerLabel,
-          )
+          !(controller?.value.errorMessage ?? "").contains("<div")
+              ? Text(
+                  controller?.value.errorMessage ?? "Error",
+                  textAlign: TextAlign.center,
+                )
+              : Container(
+                  height: 300,
+                  color: Colors.transparent,
+                  child: SingleChildScrollView(
+                    child: Html(
+                      data: controller?.value.errorMessage,
+                    ),
+                  ),
+                ),
         ],
       ),
     );
   }
 
   Widget emptyData() {
-    return emptyWidget ??
-        Container(
-          color: Colors.transparent,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                FontAwesomeIcons.database,
-                size: 50,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                "tidak ada data",
-                style: System.data.textStyle!.basicLabel,
-              )
-            ],
-          ),
-        );
+    return DragTarget<Object>(
+      builder: (c, lo, ld) {
+        if (controller?.value.droppedItem != null) {
+          return itemBuilder!(controller?.value.droppedItem, -1);
+        } else {
+          if (controller?.value.droppedItem != null) {
+            return itemBuilder!(controller?.value.droppedItem, -1);
+          } else {
+            return emptyWidget ??
+                Container(
+                  color: Colors.transparent,
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        FontAwesomeIcons.database,
+                        size: 50,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "tidak ada data",
+                        style: System.data.textStyle!.basicLabel,
+                      )
+                    ],
+                  ),
+                );
+          }
+        }
+      },
+      onMove: (object) {
+        if (object.data is T) {
+          if (controller?.value.droppedItem == (object.data as T)) return;
+          controller?.value.droppedItem = (object.data as T);
+          controller?.commit();
+        }
+      },
+      onLeave: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+      },
+      onWillAccept: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+        if (onWillReceiveDropedData != null) {
+          return onWillReceiveDropedData!((object as T), 0);
+        } else {
+          return true;
+        }
+      },
+      onAccept: (object) {
+        controller?.value.droppedItem = null;
+        controller?.commit();
+        if (onReceiveDropedData != null) {
+          onReceiveDropedData!((object as T), 0);
+        }
+      },
+    );
   }
 }
 
@@ -424,9 +577,21 @@ class ListDataComponentController<T>
   void commit() {
     notifyListeners();
   }
+
+  void startLoading() {
+    value.state = ListDataComponentState.loading;
+    commit();
+  }
+
+  void stopLoading() {
+    value.state = ListDataComponentState.loaded;
+    commit();
+  }
 }
 
 class ListDataComponentValue<T> {
+  T? droppedItem;
+  int? droppedIndexTarget;
   List<T> data = [];
   T? selected;
   ScrollController scrollController = ScrollController();

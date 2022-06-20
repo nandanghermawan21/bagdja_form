@@ -15,7 +15,7 @@ class QuestionComponent {
     ValueChanged<QuestionModel?>? onTapEdit,
   }) {
     return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 1, bottom: 1),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,

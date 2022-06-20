@@ -81,10 +81,15 @@ class CollectionComponent {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "${data?.id ?? ""} ${data?.name ?? ""}",
-            style: System.data.textStyle!.boldTitleLabel.copyWith(
-              color: textColor,
+          Expanded(
+            child: Container(
+              color: Colors.transparent,
+              child: Text(
+                "${data?.id ?? ""} ${data?.name ?? ""}",
+                style: System.data.textStyle!.boldTitleLabel.copyWith(
+                  color: textColor,
+                ),
+              ),
             ),
           ),
           Row(

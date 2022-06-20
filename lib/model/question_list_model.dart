@@ -19,8 +19,8 @@ class QuestionListModel {
 
   static QuestionListModel fromJson(Map<String, dynamic> json) {
     return QuestionListModel(
-        groupId: (json["groupId"] as num?)?.toInt(),
-        questionId: (json["questionId"] as num?)?.toInt(),
+        groupId: (json["group_id"] as num?)?.toInt(),
+        questionId: (json["question_id"] as num?)?.toInt(),
         order: (json["order"] as num?)?.toInt(),
         question: QuestionModel.fronJson(
           json,
@@ -29,6 +29,20 @@ class QuestionListModel {
   }
 
   Map<String, dynamic> toJson() {
+    return {
+      "group_id": groupId,
+      "question_id": questionId,
+      "order": order,
+      "code": question?.code,
+      "name": question?.name,
+      "label": question?.label,
+      "hint": question?.hint,
+      "type": question?.type,
+      "collection_id": question?.collectionId,
+    };
+  }
+
+  Map<String, dynamic> toInserBody() {
     return {
       "group_id": groupId,
       "question_id": questionId,
@@ -78,7 +92,7 @@ class QuestionListModel {
         HttpHeaders.authorizationHeader: "$token",
       },
       otpRequired: null,
-      body: (questionListModel?.toJson() ?? {}),
+      body: (questionListModel?.toInserBody() ?? {}),
     ).then((value) {
       return value == null ? null : QuestionListModel.fromJson((value));
     }).catchError(
@@ -91,7 +105,7 @@ class QuestionListModel {
   static Future<QuestionListModel?> update({
     required String? token,
     required int? id,
-    required String? value,
+    required int? questionId,
     required QuestionListModel? questionListModel,
   }) {
     return Network.post(
@@ -101,13 +115,13 @@ class QuestionListModel {
       ),
       querys: {
         "id": "${id ?? ""}",
-        "question_id": value ?? "",
+        "questionId": "${questionId ?? ""}",
       },
       headers: {
         HttpHeaders.authorizationHeader: "$token",
       },
       otpRequired: null,
-      body: (questionListModel?.toJson() ?? {}),
+      body: (questionListModel?.toInserBody() ?? {}),
     ).then((value) {
       return value == null ? null : QuestionListModel.fromJson((value));
     }).catchError(
@@ -120,16 +134,16 @@ class QuestionListModel {
   static Future<QuestionListModel?> delete({
     required String? token,
     required int? id,
-    required String? value,
+    required int? questionId,
   }) {
     return Network.post(
       url: Uri.parse(
         System.data.apiEndPoint.url +
-            System.data.apiEndPoint.questionGroupUpdateDataUrl,
+            System.data.apiEndPoint.questionGroupDeleteDataUrl,
       ),
       querys: {
         "id": "${id ?? ""}",
-        "question_id": value ?? "",
+        "questionId": "${questionId ?? ""}",
       },
       headers: {
         HttpHeaders.authorizationHeader: "$token",

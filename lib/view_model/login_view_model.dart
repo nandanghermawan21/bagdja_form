@@ -7,7 +7,7 @@ import 'package:suzuki/util/enum.dart';
 import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
 
-class LoginViewMOdel extends ChangeNotifier {
+class LoginViewModel extends ChangeNotifier {
   CircularLoaderController loadingController = CircularLoaderController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
