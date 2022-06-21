@@ -91,19 +91,21 @@ class BasicComponent {
 
   static Widget panelHeader({
     String? title,
+    Color? backgroundColor,
+    Color? color,
     List<MenuModel> actions = const [],
   }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
-      color: System.data.color!.primaryColor,
+      color: backgroundColor ?? System.data.color!.primaryColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "$title",
             style: System.data.textStyle!.boldTitleLabel.copyWith(
-              color: System.data.color!.lightTextColor,
+              color: color ?? System.data.color!.lightTextColor,
             ),
           ),
           Center(
@@ -117,7 +119,9 @@ class BasicComponent {
                     },
                     child: Icon(
                       actions[index].iconData ?? Icons.add,
-                      color: System.data.color!.lightTextColor,
+                      color: actions[index].color ??
+                          color ??
+                          System.data.color!.lightTextColor,
                     ),
                   );
                 },

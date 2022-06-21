@@ -15,7 +15,7 @@ class ListDataComponent<T> extends StatelessWidget {
   final ValueChanged2Param<List<T>, String?>? onDataReceived;
   final bool showSearchBox;
   final String? seachHist;
-  final ListDataComponentMode listViewMOde;
+  final ListDataComponentMode listViewMode;
   final Widget? header;
   final ValueChanged<T?>? onSelected;
   final bool enableGetMore;
@@ -32,7 +32,7 @@ class ListDataComponent<T> extends StatelessWidget {
     this.onDataReceived,
     this.showSearchBox = false,
     this.seachHist,
-    this.listViewMOde = ListDataComponentMode.listView,
+    this.listViewMode = ListDataComponentMode.listView,
     this.header,
     this.onSelected,
     this.emptyWidget,
@@ -63,7 +63,8 @@ class ListDataComponent<T> extends StatelessWidget {
             children: [
               showSearchBox ? searchBox() : const SizedBox(),
               header != null ? header! : const SizedBox(),
-              listViewMOde == ListDataComponentMode.listView
+              [ListDataComponentMode.listView, ListDataComponentMode.tile]
+                      .contains(listViewMode)
                   ? Expanded(child: childBuilder())
                   : childBuilder(),
             ],
@@ -147,7 +148,7 @@ class ListDataComponent<T> extends StatelessWidget {
       default:
         return (controller?.value.data.length ?? 0) > 0 ||
                 (controller?.value.state == ListDataComponentState.loading)
-            ? listMode()
+            ? listModeBuilder()
             : GestureDetector(
                 onTap: controller?.refresh,
                 child: emptyData(),
@@ -155,12 +156,14 @@ class ListDataComponent<T> extends StatelessWidget {
     }
   }
 
-  Widget listMode() {
-    switch (listViewMOde) {
+  Widget listModeBuilder() {
+    switch (listViewMode) {
       case ListDataComponentMode.column:
         return columnMode();
+      case ListDataComponentMode.tile:
+        return tilewMode();
       default:
-        return listViewMode();
+        return listMode();
     }
   }
 
@@ -226,7 +229,77 @@ class ListDataComponent<T> extends StatelessWidget {
     );
   }
 
-  Widget listViewMode() {
+  Widget tilewMode() {
+    return Container(
+      color: Colors.transparent,
+      child: NotificationListener(
+        onNotification: (n) {
+          if (n is ScrollEndNotification) {
+            var current = controller?.value.scrollController.position.pixels;
+            var min =
+                controller?.value.scrollController.position.minScrollExtent;
+            var max =
+                controller?.value.scrollController.position.maxScrollExtent;
+            if (controller
+                        ?.value.scrollController.position.userScrollDirection ==
+                    ScrollDirection.forward &&
+                ((current ?? 0) <= (min ?? 0))) {
+              controller?.refresh();
+            } else if (controller
+                        ?.value.scrollController.position.userScrollDirection ==
+                    ScrollDirection.reverse &&
+                ((current ?? 0) >= (max ?? 0))) {
+              if (enableGetMore == true) controller?.getOther();
+            }
+          }
+          return true;
+        },
+        child: SingleChildScrollView(
+          controller: controller?.value.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            runAlignment: WrapAlignment.start,
+            children: List.generate(
+              (controller?.value.data.length ?? 0) +
+                  (controller?.value.state == ListDataComponentState.loading
+                      ? 5
+                      : 0),
+              (index) {
+                if (itemBuilder != null) {
+                  if (index < (controller?.value.data.length ?? -1)) {
+                    return GestureDetector(
+                      onTap: () {
+                        controller?.value.selected =
+                            controller?.value.data[index];
+                        controller?.commit();
+                        if (onSelected != null) {
+                          onSelected!(controller?.value.data[index]);
+                        }
+                      },
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: IntrinsicWidth(
+                          child: item(controller?.value.data[index], index),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return loader();
+                  }
+                } else {
+                  return emptyItem();
+                }
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget listMode() {
     return NotificationListener(
       onNotification: (n) {
         if (n is ScrollEndNotification) {
@@ -614,5 +687,5 @@ enum ListDataComponentState {
 enum ListDataComponentMode {
   listView,
   column,
-  listWidget,
+  tile,
 }

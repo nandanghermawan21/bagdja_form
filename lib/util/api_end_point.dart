@@ -35,6 +35,11 @@ class ApiEndPoint {
   String questionGroupDeleteDataUrl = "questiongroup/deleteData";
   //questiongroup
 
+  //form
+  String formOfApplications = "form/application";
+  String formPages = "/form/pages";
+  //form
+
   String get url {
     if (ModeUtil.debugMode == true) {
       return baseUrlDebug;

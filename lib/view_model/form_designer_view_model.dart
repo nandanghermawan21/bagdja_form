@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
+import 'package:suzuki/model/form_model.dart';
 import 'package:suzuki/model/question_group_model.dart';
 import 'package:suzuki/model/question_list_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
 
-class FormDesignerViewMOdel extends ChangeNotifier {
+class FormDesignerViewModel extends ChangeNotifier {
   CircularLoaderController loadingController = CircularLoaderController();
   ListDataComponentController<QuestionModel?> questionController =
       ListDataComponentController<QuestionModel?>();
@@ -15,6 +16,7 @@ class FormDesignerViewMOdel extends ChangeNotifier {
       ListDataComponentController<QuestionGroupModel?>();
   Map<String, ListDataComponentController<QuestionListModel?>>
       questionListOfGroup = {};
+  FormModel? openedForm;
 
   void deleteQuestion(QuestionModel? data) {
     loadingController.startLoading();
@@ -35,6 +37,30 @@ class FormDesignerViewMOdel extends ChangeNotifier {
         message: ErrorHandlingUtil.handleApiError(onError),
         onCloseCallBack: () {
           questionController.refresh();
+        },
+      );
+    });
+  }
+
+  void deleteQuestionGroup(QuestionGroupModel? data) {
+    loadingController.startLoading();
+    QuestionGroupModel.delete(
+      token: System.data.global.token,
+      id: data?.id,
+    ).then(
+      (value) {
+        loadingController.stopLoading(
+          message: "Delete Question Success",
+          onCloseCallBack: () {
+            questionGroupController.refresh();
+          },
+        );
+      },
+    ).catchError((onError) {
+      loadingController.stopLoading(
+        message: ErrorHandlingUtil.handleApiError(onError),
+        onCloseCallBack: () {
+          questionGroupController.refresh();
         },
       );
     });
@@ -153,6 +179,16 @@ class FormDesignerViewMOdel extends ChangeNotifier {
         );
       },
     );
+  }
+
+  void openFormEditor(FormModel? form) {
+    openedForm = form;
+    commit();
+  }
+
+  void closeFormEditor() {
+    openedForm = null;
+    commit();
   }
 
   void commit() {

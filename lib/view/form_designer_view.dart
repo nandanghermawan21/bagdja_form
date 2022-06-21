@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:suzuki/component/basic_component.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
 import 'package:suzuki/component/question_component.dart';
+import 'package:suzuki/model/form_model.dart';
 import 'package:suzuki/model/menu_model.dart';
 import 'package:suzuki/model/question_group_model.dart';
 import 'package:suzuki/model/question_list_model.dart';
@@ -11,6 +13,7 @@ import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view/add_question_group_view.dart';
 import 'package:suzuki/view/add_question_view.dart';
 import 'package:suzuki/view_model/form_designer_view_model.dart';
+import 'package:suzuki/view/form_editor_view.dart';
 
 class FormDesignerView extends StatefulWidget {
   const FormDesignerView({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ class FormDesignerView extends StatefulWidget {
 }
 
 class FormDesignerViewState extends State<FormDesignerView> {
-  FormDesignerViewMOdel formDesignerViewModel = FormDesignerViewMOdel();
+  FormDesignerViewModel formDesignerViewModel = FormDesignerViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -30,29 +33,41 @@ class FormDesignerViewState extends State<FormDesignerView> {
       backgroundColor: System.data.color!.background,
       body: CircularLoaderComponent(
         controller: formDesignerViewModel.loadingController,
-        child: Container(
-          color: Colors.transparent,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: questions(),
+        child: ChangeNotifierProvider.value(
+          value: formDesignerViewModel,
+          child: Container(
+            color: Colors.transparent,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: questions(),
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: questionGroup(),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: questionGroup(),
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  color: Colors.blue,
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Consumer<FormDesignerViewModel>(
+                      builder: (c, d, w) {
+                        if (d.openedForm != null) {
+                          return formEditor();
+                        } else {
+                          return forms();
+                        }
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -79,6 +94,7 @@ class FormDesignerViewState extends State<FormDesignerView> {
             color: Colors.transparent,
             child: ListDataComponent<QuestionModel?>(
               controller: formDesignerViewModel.questionController,
+              enableGetMore: false,
               dataSource: (skip, search) {
                 return QuestionModel.list(
                   token: System.data.global.token,
@@ -135,6 +151,7 @@ class FormDesignerViewState extends State<FormDesignerView> {
             color: Colors.transparent,
             child: ListDataComponent<QuestionGroupModel?>(
               controller: formDesignerViewModel.questionGroupController,
+              enableGetMore: false,
               dataSource: (skip, search) {
                 return QuestionGroupModel.list(
                   token: System.data.global.token,
@@ -150,7 +167,8 @@ class FormDesignerViewState extends State<FormDesignerView> {
                       children: [
                         QuestionComponent.questionGroupItem(
                           data,
-                          // onTapDelete: formDesignerViewModel.deleteQuestion,
+                          onTapDelete:
+                              formDesignerViewModel.deleteQuestionGroup,
                           onTapEdit: edituestionGroup,
                         ),
                         Container(
@@ -163,7 +181,7 @@ class FormDesignerViewState extends State<FormDesignerView> {
                           child: ListDataComponent<QuestionListModel?>(
                             controller: formDesignerViewModel
                                 .questionListOfGroup["${data?.id}"],
-                            listViewMOde: ListDataComponentMode.column,
+                            listViewMode: ListDataComponentMode.column,
                             enableGetMore: false,
                             emptyWidget: Container(
                               width: double.infinity,
@@ -234,6 +252,169 @@ class FormDesignerViewState extends State<FormDesignerView> {
           ),
         )
       ],
+    );
+  }
+
+  Widget forms() {
+    return Container(
+      color: Colors.transparent,
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        children: [
+          Container(
+            height: 80,
+            color: Colors.transparent,
+            child: Row(
+              children: [
+                Container(
+                  color: Colors.transparent,
+                  width: 300,
+                  child: FittedBox(
+                    alignment: Alignment.bottomLeft,
+                    fit: BoxFit.fitHeight,
+                    child: Text(
+                      "FORM",
+                      style: System.data.textStyle!.basicLabel,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.transparent,
+              child: ListDataComponent<FormModel?>(
+                controller: ListDataComponentController<FormModel?>(),
+                enableGetMore: false,
+                dataSource: (skip, search) {
+                  return FormModel.formOfApplication(
+                    token: System.data.global.token,
+                    id: 1,
+                  );
+                },
+                header: Container(
+                  margin: const EdgeInsets.only(
+                      left: 10, right: 10, top: 3, bottom: 3),
+                  padding: const EdgeInsets.all(10),
+                  color: System.data.color!.primaryColor,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Text(
+                            "Code",
+                            style:
+                                System.data.textStyle!.boldTitleLabel.copyWith(
+                              color: System.data.color!.lightTextColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Text(
+                            "Name",
+                            style:
+                                System.data.textStyle!.boldTitleLabel.copyWith(
+                              color: System.data.color!.lightTextColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Text(
+                            "Action",
+                            style:
+                                System.data.textStyle!.boldTitleLabel.copyWith(
+                              color: System.data.color!.lightTextColor,
+                            ),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                itemBuilder: (data, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(
+                        left: 10, right: 10, top: 3, bottom: 3),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                      color: Colors.black,
+                    )),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Text(
+                              "${data?.code}",
+                              style: System.data.textStyle!.boldTitleLabel
+                                  .copyWith(),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Text(
+                              "${data?.name}",
+                              style: System.data.textStyle!.boldTitleLabel
+                                  .copyWith(),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            color: Colors.transparent,
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                formDesignerViewModel.openFormEditor(data);
+                              },
+                              child: const Icon(
+                                Icons.edit,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget formEditor() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: Colors.transparent,
+      child: FormEditorView(
+        formModel: formDesignerViewModel.openedForm,
+        onTapClose: formDesignerViewModel.closeFormEditor,
+      ),
     );
   }
 

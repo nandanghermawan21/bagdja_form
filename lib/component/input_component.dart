@@ -11,11 +11,15 @@ class InputComponent {
     bool obscureText = false,
     TextInputType? keyboardType,
     bool isValid = true,
+    bool? readOnly = false,
+    String? value,
   }) {
+    controller?.text = value ?? "";
     return TextField(
       controller: controller ?? TextEditingController(),
       obscureText: obscureText,
       keyboardType: keyboardType,
+      readOnly: readOnly ?? false,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(
@@ -44,6 +48,8 @@ class InputComponent {
     TextInputType? keyboardType,
     String? capTitle,
     bool? isValid = true,
+    bool? readOnly = false,
+    String? value,
   }) {
     return Container(
       padding: const EdgeInsets.all(5),
@@ -66,6 +72,8 @@ class InputComponent {
                   obscureText: obscureText,
                   keyboardType: keyboardType,
                   isValid: isValid!,
+                  readOnly: readOnly,
+                  value: value,
                 ),
               ),
             )
