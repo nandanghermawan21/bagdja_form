@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
-import 'package:suzuki/model/collection_model.dart';
+import 'package:suzuki/model/page_model.dart';
 import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
 
-class AddCollectionVewModel extends ChangeNotifier {
+class AddPageViewModel extends ChangeNotifier {
   CircularLoaderController loadingController = CircularLoaderController();
-  CollectionModel? collectionModel;
   TextEditingController nameController = TextEditingController();
+  PageModel? order;
 
   bool isValidName = true;
+  bool isValidOrder = true;
 
-  void fill() {
-    nameController.text = collectionModel?.name ?? "";
-  }
-
-  void clear() {
-    nameController.text = "";
+  void savePage(BuildContext context, PageModel page) {
+    if (page.id != null) {
+      updatePage(context, page);
+    } else {
+      addNewPage(context, page);
+    }
   }
 
   bool? validateName() {
@@ -36,59 +37,57 @@ class AddCollectionVewModel extends ChangeNotifier {
     return _valid;
   }
 
-  void save() {
+  void updatePage(BuildContext context, PageModel page) {
     if (!validate()) return;
-    if (collectionModel != null) {
-      update();
-    } else {
-      add();
-    }
+    page.name = nameController.text;
+    page.order = order?.order ?? 1;
+    loadingController.startLoading();
+    PageModel.update(
+      token: System.data.global.token,
+      id: page.id,
+      pageModel: page,
+    ).then((value) {
+      loadingController.stopLoading(
+        message: "Update Page Success",
+        onCloseCallBack: () {
+          Navigator.of(context).pop();
+        },
+        duration: const Duration(
+          seconds: 2,
+        ),
+      );
+    }).catchError((onError) {
+      loadingController.stopLoading(
+        message: ErrorHandlingUtil.handleApiError(onError),
+        isError: true,
+      );
+    });
+  }
+
+  void addNewPage(BuildContext context, PageModel page) {
+    if (!validate()) return;
+    page.name = nameController.text;
+    page.order = order?.order ?? page.order;
+    loadingController.startLoading();
+    PageModel.add(
+      token: System.data.global.token,
+      pageModel: page,
+    ).then((value) {
+      loadingController.stopLoading(
+          message: "Add new page Success",
+          onCloseCallBack: () {
+            Navigator.of(context).pop();
+          },
+          duration: const Duration(seconds: 2));
+    }).catchError((onError) {
+      loadingController.stopLoading(
+        message: ErrorHandlingUtil.handleApiError(onError),
+        isError: true,
+      );
+    });
   }
 
   void commit() {
     notifyListeners();
-  }
-
-  void update() {
-    loadingController.startLoading();
-    CollectionModel.update(
-      token: System.data.global.token,
-      id: collectionModel?.id,
-      collectionModel: CollectionModel(
-        name: nameController.text,
-      ),
-    ).then((value) {
-      loadingController.stopLoading(
-          duration: const Duration(seconds: 2),
-          message: "Create Collection Success",
-          onCloseCallBack: () {});
-    }).catchError((onError) {
-      loadingController.stopLoading(
-        message: ErrorHandlingUtil.handleApiError(onError),
-        isError: true,
-      );
-    });
-  }
-
-  void add() {
-    loadingController.startLoading();
-    CollectionModel.create(
-      token: System.data.global.token,
-      collectionModel: CollectionModel(
-        name: nameController.text,
-      ),
-    ).then((value) {
-      loadingController.stopLoading(
-          message: "Create Collection Success",
-          duration: const Duration(seconds: 2),
-          onCloseCallBack: () {
-            clear();
-          });
-    }).catchError((onError) {
-      loadingController.stopLoading(
-        message: ErrorHandlingUtil.handleApiError(onError),
-        isError: true,
-      );
-    });
   }
 }

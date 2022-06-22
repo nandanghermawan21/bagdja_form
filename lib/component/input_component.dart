@@ -14,7 +14,10 @@ class InputComponent {
     bool? readOnly = false,
     String? value,
   }) {
-    controller?.text = value ?? "";
+    // controller?.text = controller.text == "" ? value ?? "" : "";
+    if (controller?.text == "" && value != null) {
+      controller?.text = value;
+    }
     return TextField(
       controller: controller ?? TextEditingController(),
       obscureText: obscureText,

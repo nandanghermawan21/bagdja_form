@@ -71,7 +71,10 @@ class AddQuestionGroupViewModel extends ChangeNotifier {
       ),
     ).then((value) {
       loadingController.stopLoading(
-          message: "Create Collection Success", onCloseCallBack: () {});
+        message: "Create Collection Success",
+        duration: const Duration(seconds: 2),
+        onCloseCallBack: () {},
+      );
     }).catchError((onError) {
       loadingController.stopLoading(
         message: ErrorHandlingUtil.handleApiError(onError),
@@ -91,6 +94,7 @@ class AddQuestionGroupViewModel extends ChangeNotifier {
     ).then((value) {
       loadingController.stopLoading(
           message: "Create Collection Success",
+          duration: const Duration(seconds: 2),
           onCloseCallBack: () {
             clear();
           });

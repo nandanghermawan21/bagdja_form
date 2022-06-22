@@ -40,6 +40,16 @@ class ApiEndPoint {
   String formPages = "/form/pages";
   //form
 
+  //page
+  String pageCreate = "page/create";
+  String pageUpdate = "page/update";
+  String pageDelete = "page/delete";
+  String pageQuestions = "page/questions";
+  String pageAddQuestion = "page/addQuestion";
+  String pageUpdateQuestion = "page/updateQuestion";
+  String pageDeleteQuestion = "page/deleteQuestion";
+  //page
+
   String get url {
     if (ModeUtil.debugMode == true) {
       return baseUrlDebug;

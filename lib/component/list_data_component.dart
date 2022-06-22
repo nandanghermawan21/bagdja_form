@@ -232,6 +232,7 @@ class ListDataComponent<T> extends StatelessWidget {
   Widget tilewMode() {
     return Container(
       color: Colors.transparent,
+      width: double.infinity,
       child: NotificationListener(
         onNotification: (n) {
           if (n is ScrollEndNotification) {
@@ -258,9 +259,6 @@ class ListDataComponent<T> extends StatelessWidget {
           controller: controller?.value.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           child: Wrap(
-            alignment: WrapAlignment.start,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            runAlignment: WrapAlignment.start,
             children: List.generate(
               (controller?.value.data.length ?? 0) +
                   (controller?.value.state == ListDataComponentState.loading
@@ -278,9 +276,8 @@ class ListDataComponent<T> extends StatelessWidget {
                           onSelected!(controller?.value.data[index]);
                         }
                       },
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: IntrinsicWidth(
+                      child: IntrinsicWidth(
+                        child: Container(
                           child: item(controller?.value.data[index], index),
                         ),
                       ),
@@ -353,30 +350,30 @@ class ListDataComponent<T> extends StatelessWidget {
   }
 
   Widget item(T? data, int index) {
+    List<Widget> _item = [
+      draggable(data, index),
+      Container(
+        color: Colors.transparent,
+        child: Draggable<Object>(
+          dragAnchorStrategy: (drg, obj, offset) {
+            return const Offset(1, 1);
+          },
+          feedback: Material(
+            child: dragFeedBack(data, index),
+          ),
+          data: dragDataBuilder != null ? dragDataBuilder!(data, index) : data,
+          child: itemBuilder!(data, index),
+        ),
+      ),
+      index == (controller?.value.data.length ?? 0) - 1
+          ? draggable(data, index + 1)
+          : const SizedBox(),
+    ];
+
     return Container(
       color: Colors.transparent,
       child: Column(
-        children: [
-          draggable(data, index),
-          Container(
-            color: Colors.transparent,
-            child: Draggable<Object>(
-              dragAnchorStrategy: (drg, obj, offset) {
-                return const Offset(1, 1);
-              },
-              feedback: Material(
-                child: dragFeedBack(data, index),
-              ),
-              data: dragDataBuilder != null
-                  ? dragDataBuilder!(data, index)
-                  : data,
-              child: itemBuilder!(data, index),
-            ),
-          ),
-          index == (controller?.value.data.length ?? 0) - 1
-              ? draggable(data, index + 1)
-              : const SizedBox(),
-        ],
+        children: _item,
       ),
     );
   }

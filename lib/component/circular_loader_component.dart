@@ -222,6 +222,7 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
   VoidCallback? onCloseCallback;
 
   void startLoading() {
+    value.onclosed = false;
     value.state = CircularLoaderState.onLoading;
     commit();
   }
@@ -241,9 +242,6 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
       Timer.periodic(duration, (timer) {
         timer.cancel();
         close();
-        if (onCloseCallBack != null) {
-          onCloseCallBack();
-        }
       });
     }
 
@@ -255,6 +253,7 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
   }
 
   void forceStop() {
+    value.onclosed = true;
     value.state = CircularLoaderState.idle;
     commit();
   }
@@ -262,9 +261,11 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
   void close() {
     if (value.state == CircularLoaderState.onLoading) return;
     value.state = CircularLoaderState.idle;
-    if (onCloseCallback != null) {
+    if (onCloseCallback != null && value.onclosed == false) {
+      value.onclosed = true;
       onCloseCallback!();
     }
+    value.onclosed = true;
     commit();
   }
 
@@ -276,6 +277,7 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
 class CircularLoaderValue {
   CircularLoaderState state = CircularLoaderState.idle;
   String? message;
+  bool onclosed = true;
 }
 
 enum CircularLoaderState {

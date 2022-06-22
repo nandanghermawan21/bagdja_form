@@ -22,6 +22,7 @@ class DataCollectionViewModel extends ChangeNotifier {
     ).then(
       (value) {
         loadingController.stopLoading(
+          duration: const Duration(seconds: 2),
           message: "Delete Question Success",
           onCloseCallBack: () {
             collectionListController.refresh();
@@ -48,6 +49,7 @@ class DataCollectionViewModel extends ChangeNotifier {
       (value) {
         loadingController.stopLoading(
           message: "Delete Question Success",
+          duration: const Duration(seconds: 2),
           onCloseCallBack: () {
             collectionDataListController.refresh();
           },

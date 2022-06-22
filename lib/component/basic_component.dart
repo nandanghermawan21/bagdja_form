@@ -132,4 +132,71 @@ class BasicComponent {
       ),
     );
   }
+
+  static Future<bool> confirmModal(
+    BuildContext context, {
+    required String message,
+  }) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return Center(
+          child: Material(
+            child: Container(
+              width: 200,
+              color: Colors.white,
+              padding: const EdgeInsets.all(15),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        color: Colors.transparent,
+                        alignment: Alignment.center,
+                        child: Text(
+                          message,
+                          style: System.data.textStyle!.boldTitleLabel,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop(true);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                            System.data.color!.primaryColor,
+                          )),
+                          child: Text(
+                            "Yes",
+                            style:
+                                System.data.textStyle!.boldTitleLabel.copyWith(
+                              color: System.data.color?.lightTextColor,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    ).then((value) {
+      if (value == true) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 }

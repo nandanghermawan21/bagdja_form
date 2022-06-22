@@ -26,11 +26,11 @@ class FormDesignerViewModel extends ChangeNotifier {
     ).then(
       (value) {
         loadingController.stopLoading(
-          message: "Delete Question Success",
-          onCloseCallBack: () {
-            questionController.refresh();
-          },
-        );
+            message: "Delete Question Success",
+            onCloseCallBack: () {
+              questionController.refresh();
+            },
+            duration: const Duration(seconds: 2));
       },
     ).catchError((onError) {
       loadingController.stopLoading(
@@ -50,11 +50,11 @@ class FormDesignerViewModel extends ChangeNotifier {
     ).then(
       (value) {
         loadingController.stopLoading(
-          message: "Delete Question Success",
-          onCloseCallBack: () {
-            questionGroupController.refresh();
-          },
-        );
+            message: "Delete Question Success",
+            onCloseCallBack: () {
+              questionGroupController.refresh();
+            },
+            duration: const Duration(seconds: 2));
       },
     ).catchError((onError) {
       loadingController.stopLoading(
@@ -75,11 +75,11 @@ class FormDesignerViewModel extends ChangeNotifier {
         .then(
       (value) {
         loadingController.stopLoading(
-          message: "Delete Question Success",
-          onCloseCallBack: () {
-            questionListOfGroup["${data?.groupId}"]?.refresh();
-          },
-        );
+            message: "Delete Question Success",
+            onCloseCallBack: () {
+              questionListOfGroup["${data?.groupId}"]?.refresh();
+            },
+            duration: const Duration(seconds: 2));
       },
     ).catchError((onError) {
       loadingController.stopLoading(

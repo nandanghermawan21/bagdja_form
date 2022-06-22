@@ -83,6 +83,8 @@ class QuestionComponent {
 
   static questionGroupItem(
     QuestionGroupModel? data, {
+    bool showEditButton = true,
+    bool showDeleteButton = true,
     ValueChanged<QuestionGroupModel?>? onTapDelete,
     ValueChanged<QuestionGroupModel?>? onTapEdit,
   }) {
@@ -128,26 +130,30 @@ class QuestionComponent {
             height: 30,
             color: Colors.transparent,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  color: Colors.transparent,
-                  child: GestureDetector(
-                    onTap: () {
-                      onTapDelete!(data);
-                    },
-                    child: const Icon(Icons.delete),
-                  ),
-                ),
-                Container(
-                  color: Colors.transparent,
-                  child: GestureDetector(
-                    onTap: () {
-                      onTapEdit!(data);
-                    },
-                    child: const Icon(Icons.edit),
-                  ),
-                ),
+                !showDeleteButton
+                    ? const SizedBox()
+                    : Container(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                          onTap: () {
+                            onTapDelete!(data);
+                          },
+                          child: const Icon(Icons.delete),
+                        ),
+                      ),
+                !showEditButton
+                    ? const SizedBox()
+                    : Container(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                          onTap: () {
+                            onTapEdit!(data);
+                          },
+                          child: const Icon(Icons.edit),
+                        ),
+                      ),
               ],
             ),
           ),

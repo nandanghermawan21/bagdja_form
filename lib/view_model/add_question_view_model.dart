@@ -150,7 +150,10 @@ class AddQuestionViewModel extends ChangeNotifier {
       ),
     ).then((value) {
       loadingController.stopLoading(
-          message: "Update Question Success", onCloseCallBack: () {});
+        message: "Update Question Success",
+        onCloseCallBack: () {},
+        duration: const Duration(seconds: 2),
+      );
     }).catchError((onError) {
       loadingController.stopLoading(
         message: ErrorHandlingUtil.handleApiError(onError),
@@ -176,7 +179,8 @@ class AddQuestionViewModel extends ChangeNotifier {
           message: "Add Question Success",
           onCloseCallBack: () {
             clear();
-          });
+          },
+          duration: const Duration(seconds: 2));
     }).catchError((onError) {
       loadingController.stopLoading(
         message: ErrorHandlingUtil.handleApiError(onError),

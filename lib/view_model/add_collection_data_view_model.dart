@@ -74,7 +74,9 @@ class AddCollectionDataViewModel extends ChangeNotifier {
       ),
     ).then((value) {
       loadingController.stopLoading(
-          message: "Create Collection Success", onCloseCallBack: () {});
+          duration: const Duration(seconds: 2),
+          message: "Create Collection Success",
+          onCloseCallBack: () {});
     }).catchError((onError) {
       loadingController.stopLoading(
         message: ErrorHandlingUtil.handleApiError(onError),
@@ -94,6 +96,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
       ),
     ).then((value) {
       loadingController.stopLoading(
+          duration: const Duration(seconds: 2),
           message: "Create Collection Success",
           onCloseCallBack: () {
             clear();
