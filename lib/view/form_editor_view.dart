@@ -12,6 +12,7 @@ import 'package:suzuki/model/page_model.dart';
 import 'package:suzuki/model/page_question_model.dart';
 import 'package:suzuki/model/question_group_model.dart';
 import 'package:suzuki/util/system.dart';
+import 'package:suzuki/view/add_page_dicission_view.dart';
 import 'package:suzuki/view_model/form_editor_view_model.dart';
 import 'package:suzuki/view/add_page_view.dart';
 
@@ -240,9 +241,16 @@ class FormEditorViewState extends State<FormEditorView> {
                         color: Colors.white,
                       )
                     : pageQuestion(page),
-                BasicComponent.panelHeader(
-                  title: "Dicission",
-                ),
+                BasicComponent.panelHeader(title: "Dicission", actions: [
+                  MenuModel(
+                    iconData: Icons.edit,
+                    onTap: () {
+                      editDicission(
+                        pageId: page?.id ?? 0,
+                      );
+                    },
+                  )
+                ]),
               ],
             ),
           )
@@ -351,6 +359,21 @@ class FormEditorViewState extends State<FormEditorView> {
                         0) +
                     1,
               ),
+        );
+      },
+    );
+  }
+
+  Future<void> editDicission({
+    required int pageId,
+    int? groupId,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (ctx) {
+        return AddPageDicissionView(
+          pageId: pageId,
+          groupId: groupId,
         );
       },
     );

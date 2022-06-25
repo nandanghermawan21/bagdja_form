@@ -48,7 +48,15 @@ class ApiEndPoint {
   String pageAddQuestion = "page/addQuestion";
   String pageUpdateQuestion = "page/updateQuestion";
   String pageDeleteQuestion = "page/deleteQuestion";
+  String pageDicission = "page/dicission";
+  String pageAddDicission = "page/addDicission";
+  String pageUpdateDicission = "page/updateDicission";
+  String pageDeleteDicission = "page/deleteDicission";
   //page
+
+  //dicission
+  String dicissionTypes = "dicission/types";
+  //dicission
 
   String get url {
     if (ModeUtil.debugMode == true) {

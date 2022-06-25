@@ -252,7 +252,8 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
     commit();
   }
 
-  void forceStop() {
+  void forceStop({String? message}) {
+    value.message = message;
     value.onclosed = true;
     value.state = CircularLoaderState.idle;
     commit();
@@ -267,6 +268,14 @@ class CircularLoaderController extends ValueNotifier<CircularLoaderValue> {
     }
     value.onclosed = true;
     commit();
+  }
+
+  bool get onLoading {
+    if (value.state == CircularLoaderState.onLoading) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void commit() {

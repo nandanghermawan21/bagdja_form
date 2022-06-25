@@ -13,17 +13,20 @@ class QuestionComponent {
     ValueChanged<QuestionModel?>? onTapDelete,
     bool showEdit = true,
     ValueChanged<QuestionModel?>? onTapEdit,
+    bool showBorder = true,
   }) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, top: 1, bottom: 1),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-          style: BorderStyle.solid,
-          width: 0.5,
-        ),
+        border: showBorder != true
+            ? null
+            : Border.all(
+                color: Colors.black,
+                style: BorderStyle.solid,
+                width: 0.5,
+              ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,37 +47,32 @@ class QuestionComponent {
               ),
             ),
           ),
-          Container(
-            width: 50,
-            height: 30,
-            color: Colors.transparent,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                showDelete != true
-                    ? const SizedBox()
-                    : Container(
-                        color: Colors.transparent,
-                        child: GestureDetector(
-                          onTap: () {
-                            onTapDelete!(data);
-                          },
-                          child: const Icon(Icons.delete),
-                        ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              showDelete != true
+                  ? const SizedBox()
+                  : Container(
+                      color: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: () {
+                          onTapDelete!(data);
+                        },
+                        child: const Icon(Icons.delete),
                       ),
-                showEdit != true
-                    ? const SizedBox()
-                    : Container(
-                        color: Colors.transparent,
-                        child: GestureDetector(
-                          onTap: () {
-                            onTapEdit!(data);
-                          },
-                          child: const Icon(Icons.edit),
-                        ),
+                    ),
+              showEdit != true
+                  ? const SizedBox()
+                  : Container(
+                      color: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: () {
+                          onTapEdit!(data);
+                        },
+                        child: const Icon(Icons.edit),
                       ),
-              ],
-            ),
+                    ),
+            ],
           ),
         ],
       ),
@@ -85,31 +83,37 @@ class QuestionComponent {
     QuestionGroupModel? data, {
     bool showEditButton = true,
     bool showDeleteButton = true,
+    bool showExpanButton = false,
     ValueChanged<QuestionGroupModel?>? onTapDelete,
     ValueChanged<QuestionGroupModel?>? onTapEdit,
+    bool showBorder = true,
   }) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 0),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-          style: BorderStyle.solid,
-          width: 0.5,
-        ),
+        border: showBorder != true
+            ? null
+            : Border.all(
+                color: Colors.black,
+                style: BorderStyle.solid,
+                width: 0.5,
+              ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 20,
-            color: Colors.transparent,
-            child: const Icon(
-              FontAwesomeIcons.chevronDown,
-              size: 10,
-            ),
-          ),
+          showExpanButton == true
+              ? Container(
+                  width: 20,
+                  color: Colors.transparent,
+                  child: const Icon(
+                    FontAwesomeIcons.chevronDown,
+                    size: 10,
+                  ),
+                )
+              : const SizedBox(),
           const SizedBox(
             width: 5,
           ),

@@ -94,11 +94,24 @@ class FormDesignerViewState extends State<FormDesignerView> {
           child: Container(
             color: Colors.transparent,
             child: ListDataComponent<QuestionModel?>(
+              showSearchBox: true,
               controller: formDesignerViewModel.questionController,
               enableGetMore: false,
               dataSource: (skip, search) {
                 return QuestionModel.list(
                   token: System.data.global.token,
+                ).then(
+                  (value) {
+                    return value
+                        .where((e) =>
+                            (e?.code ?? "")
+                                .toLowerCase()
+                                .contains((search ?? "").toLowerCase()) ||
+                            (e?.name ?? "")
+                                .toLowerCase()
+                                .contains((search ?? "").toLowerCase()))
+                        .toList();
+                  },
                 );
               },
               itemBuilder: (data, index) {
@@ -161,11 +174,22 @@ class FormDesignerViewState extends State<FormDesignerView> {
             color: Colors.transparent,
             child: ListDataComponent<QuestionGroupModel?>(
               controller: formDesignerViewModel.questionGroupController,
+              showSearchBox: true,
               enableGetMore: false,
               dataSource: (skip, search) {
                 return QuestionGroupModel.list(
                   token: System.data.global.token,
-                );
+                ).then((value) {
+                  return value
+                      .where((e) =>
+                          (e?.code ?? "")
+                              .toLowerCase()
+                              .contains((search ?? "").toLowerCase()) ||
+                          (e?.name ?? "")
+                              .toLowerCase()
+                              .contains((search ?? "").toLowerCase()))
+                      .toList();
+                });
               },
               itemBuilder: (data, index) {
                 formDesignerViewModel.questionListOfGroup["${data?.id}"] =
