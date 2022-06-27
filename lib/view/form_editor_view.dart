@@ -187,6 +187,8 @@ class FormEditorViewState extends State<FormEditorView> {
   Widget pageItem(PageModel? page, {bool isForDragFeedBack = false}) {
     formEditorViewModel.pageQuestionControllers["${page?.id}"] =
         ListDataComponentController<PageQuestionModel?>();
+    formEditorViewModel.pageDicissionControllers["${page?.id}"] =
+        ListDataComponentController<DicissionSummaryModel?>();
     return Container(
       margin: const EdgeInsets.all(10),
       color: Colors.transparent,
@@ -354,7 +356,7 @@ class FormEditorViewState extends State<FormEditorView> {
 
   Widget dicissionSummaryList(PageModel? page) {
     return ListDataComponent<DicissionSummaryModel?>(
-      controller: ListDataComponentController<DicissionSummaryModel?>(),
+      controller: formEditorViewModel.pageDicissionControllers["${page?.id}"],
       listViewMode: ListDataComponentMode.column,
       enableGetMore: false,
       emptyWidget: Container(),
@@ -442,6 +444,8 @@ class FormEditorViewState extends State<FormEditorView> {
           groupId: groupId,
         );
       },
-    );
+    ).then((value) {
+      formEditorViewModel.pageDicissionControllers["$pageId"]?.refresh();
+    });
   }
 }

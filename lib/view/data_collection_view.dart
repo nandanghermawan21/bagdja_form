@@ -83,9 +83,23 @@ class DataCollectionState extends State<DataCollectionView> {
             child: ListDataComponent<CollectionModel?>(
               controller: dataCollectionViewModel.collectionListController,
               enableGetMore: false,
+              showSearchBox: true,
               dataSource: (skip, search) {
                 return CollectionModel.list(
                   token: System.data.global.token,
+                ).then(
+                  (value) {
+                    return value
+                        .where((e) =>
+                            (e?.id ?? "")
+                                .toString()
+                                .toLowerCase()
+                                .contains((search ?? "").toLowerCase()) ||
+                            (e?.name ?? "")
+                                .toLowerCase()
+                                .contains((search ?? "").toLowerCase()))
+                        .toList();
+                  },
                 );
               },
               onSelected: (data) {
@@ -220,6 +234,7 @@ class DataCollectionState extends State<DataCollectionView> {
                 controller:
                     dataCollectionViewModel.collectionDataListController,
                 enableGetMore: false,
+                showSearchBox: true,
                 header: Container(
                   padding: const EdgeInsets.all(0),
                   color: System.data.color!.primaryColor,
@@ -290,11 +305,26 @@ class DataCollectionState extends State<DataCollectionView> {
                     ],
                   ),
                 ),
-                dataSource: (skip, index) {
+                dataSource: (skip, search) {
                   return CollectionDataModel.list(
                     token: System.data.global.token,
                     collectionId: dataCollectionViewModel
                         .collectionListController.value.selected?.id,
+                  ).then(
+                    (value) {
+                      return value
+                          .where((e) =>
+                              (e?.value ?? "")
+                                  .toLowerCase()
+                                  .contains((search ?? "").toLowerCase()) ||
+                              (e?.label ?? "")
+                                  .toLowerCase()
+                                  .contains((search ?? "").toLowerCase()) ||
+                              (e?.group ?? "")
+                                  .toLowerCase()
+                                  .contains((search ?? "").toLowerCase()))
+                          .toList();
+                    },
                   );
                 },
                 itemBuilder: (data, index) {

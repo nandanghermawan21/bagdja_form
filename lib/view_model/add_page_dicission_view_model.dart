@@ -47,7 +47,9 @@ class AddPageDicissionViewModel extends ChangeNotifier {
   void saveDicission(DicissionModel? data, int index) {
     if (editStatusDicission[index] == EditStatusDicissions.newData) {
       addDicission(data, index);
-    } else {}
+    } else {
+      updateDicission(data, index);
+    }
   }
 
   void addDicission(DicissionModel? data, int index) {

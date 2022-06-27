@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
+import 'package:suzuki/model/dicission_summary_model.dart';
 import 'package:suzuki/model/page_model.dart';
 import 'package:suzuki/model/page_question_model.dart';
 import 'package:suzuki/util/error_handling_util.dart';
@@ -13,6 +14,8 @@ class FormEditorViewModel extends ChangeNotifier {
 
   Map<String, ListDataComponentController<PageQuestionModel?>>
       pageQuestionControllers = {};
+  Map<String, ListDataComponentController<DicissionSummaryModel?>>
+      pageDicissionControllers = {};
 
   void deletePage(BuildContext context, PageModel? data) {
     loadingController.startLoading();

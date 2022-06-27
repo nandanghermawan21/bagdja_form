@@ -61,8 +61,8 @@ class ListDataComponent<T> extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              showSearchBox ? searchBox() : const SizedBox(),
               header != null ? header! : const SizedBox(),
+              showSearchBox ? searchBox() : const SizedBox(),
               [ListDataComponentMode.listView, ListDataComponentMode.tile]
                       .contains(listViewMode)
                   ? Expanded(child: childBuilder())
