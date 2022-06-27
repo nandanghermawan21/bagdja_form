@@ -7,11 +7,13 @@ class CollectionDataModel {
   int? collectionId; //": 0,
   String? value; //": "string",
   String? label; //": "string"
+  String? group; //": "string"
 
   CollectionDataModel({
     this.collectionId,
     this.value,
     this.label,
+    this.group,
   });
 
   static CollectionDataModel fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class CollectionDataModel {
       collectionId: (json["collection_id"] as int?)?.toInt(),
       value: (json["value"] as String?),
       label: (json["label"] as String?),
+      group: (json["group"] as String?),
     );
   }
 
@@ -27,6 +30,7 @@ class CollectionDataModel {
       "collection_id": collectionId,
       "value": value,
       "label": label,
+      "group": group,
     };
   }
 

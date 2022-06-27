@@ -366,7 +366,6 @@ class FormDesignerViewState extends State<FormDesignerView> {
                 dataSource: (skip, search) {
                   return FormModel.formOfApplication(
                     token: System.data.global.token,
-                    id: 1,
                   );
                 },
                 header: Container(

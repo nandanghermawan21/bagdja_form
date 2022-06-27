@@ -34,6 +34,12 @@ class AddPageDiciisionViewState extends State<AddPageDicissionView> {
       AddPageDicissionViewModel();
 
   @override
+  void initState() {
+    addPageDicissionViewModel.group = widget.groupId;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -279,7 +285,11 @@ class AddPageDiciisionViewState extends State<AddPageDicissionView> {
       dataSource: PageQuestionModel.list(
         token: System.data.global.token,
         pageId: widget.pageId,
-      ),
+      ).then((value) {
+        return value
+            .where((a) => a?.groupId != addPageDicissionViewModel.group)
+            .toList();
+      }),
       itemBuilder: (item) {
         return Container(
           color: Colors.transparent,

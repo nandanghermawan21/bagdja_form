@@ -6,6 +6,7 @@ import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/input_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
 import 'package:suzuki/component/question_component.dart';
+import 'package:suzuki/model/dicission_summary_model.dart';
 import 'package:suzuki/model/form_model.dart';
 import 'package:suzuki/model/menu_model.dart';
 import 'package:suzuki/model/page_model.dart';
@@ -241,16 +242,23 @@ class FormEditorViewState extends State<FormEditorView> {
                         color: Colors.white,
                       )
                     : pageQuestion(page),
-                BasicComponent.panelHeader(title: "Dicission", actions: [
-                  MenuModel(
-                    iconData: Icons.edit,
-                    onTap: () {
-                      editDicission(
-                        pageId: page?.id ?? 0,
-                      );
-                    },
-                  )
-                ]),
+                BasicComponent.panelHeader(
+                  title: "Dicission",
+                  actions: [
+                    MenuModel(
+                      iconData: Icons.edit,
+                      onTap: () {
+                        editDicission(
+                          pageId: page?.id ?? 0,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Container(
+                  color: Colors.white,
+                  child: dicissionSummaryList(page),
+                ),
               ],
             ),
           )
@@ -341,6 +349,64 @@ class FormEditorViewState extends State<FormEditorView> {
           );
         },
       ),
+    );
+  }
+
+  Widget dicissionSummaryList(PageModel? page) {
+    return ListDataComponent<DicissionSummaryModel?>(
+      controller: ListDataComponentController<DicissionSummaryModel?>(),
+      listViewMode: ListDataComponentMode.column,
+      enableGetMore: false,
+      emptyWidget: Container(),
+      dataSource: (index, key) {
+        return DicissionSummaryModel.pageDicission(
+          token: System.data.global.token,
+          pageId: page?.id,
+        );
+      },
+      itemBuilder: (data, index) {
+        return Container(
+          margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  data?.pageId == null
+                      ? "-"
+                      : "${data?.code ?? ""} ( ${data?.total ?? ""} Dicission )",
+                  style: System.data.textStyle?.boldTitleLabel,
+                ),
+              ),
+              Container(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        editDicission(
+                          pageId: page?.id ?? 0,
+                          groupId: data?.groupId,
+                        );
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: System.data.color!.darkTextColor,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

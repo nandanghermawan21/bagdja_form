@@ -49,6 +49,7 @@ class ApiEndPoint {
   String pageUpdateQuestion = "page/updateQuestion";
   String pageDeleteQuestion = "page/deleteQuestion";
   String pageDicission = "page/dicission";
+  String pageDicissionSummary = "page/dicissionSummary";
   String pageAddDicission = "page/addDicission";
   String pageUpdateDicission = "page/updateDicission";
   String pageDeleteDicission = "page/deleteDicission";

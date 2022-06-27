@@ -255,6 +255,21 @@ class DataCollectionState extends State<DataCollectionView> {
                         ),
                       ),
                       Expanded(
+                        flex: 6,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 5, bottom: 5),
+                          color: Colors.transparent,
+                          child: Text(
+                            "Group",
+                            style:
+                                System.data.textStyle!.boldTitleLabel.copyWith(
+                              color: System.data.color!.lightTextColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
                         flex: 1,
                         child: Container(
                           padding: const EdgeInsets.only(
@@ -312,6 +327,18 @@ class DataCollectionState extends State<DataCollectionView> {
                             color: Colors.transparent,
                             child: Text(
                               data?.label ?? "",
+                              style: System.data.textStyle!.boldTitleLabel,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 5, bottom: 5),
+                            color: Colors.transparent,
+                            child: Text(
+                              data?.group ?? "",
                               style: System.data.textStyle!.boldTitleLabel,
                             ),
                           ),
