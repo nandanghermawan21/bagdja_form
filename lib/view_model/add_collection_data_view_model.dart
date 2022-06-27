@@ -10,6 +10,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
   CollectionDataModel? collectionDataModel;
   TextEditingController valueController = TextEditingController();
   TextEditingController labelController = TextEditingController();
+  TextEditingController groupController = TextEditingController();
 
   bool isValidValue = true;
   bool isValidLabel = true;
@@ -17,6 +18,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
   void fill() {
     valueController.text = collectionDataModel?.value ?? "";
     labelController.text = collectionDataModel?.label ?? "";
+    groupController.text = collectionDataModel?.group ?? "";
   }
 
   void clear() {
@@ -71,6 +73,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
         collectionId: collectionDataModel?.collectionId,
         value: valueController.text,
         label: labelController.text,
+        group: groupController.text,
       ),
     ).then((value) {
       loadingController.stopLoading(

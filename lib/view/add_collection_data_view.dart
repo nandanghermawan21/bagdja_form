@@ -98,6 +98,17 @@ class AddCollectionDataState extends State<AddCollectionDataView> {
                       const SizedBox(
                         height: 10,
                       ),
+                      Consumer<AddCollectionDataViewModel>(
+                        builder: (c, d, w) {
+                          return InputComponent.inputTextWithCap(
+                            capTitle: "Group",
+                            controller: d.groupController,
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         color: Colors.transparent,
                         child: Row(

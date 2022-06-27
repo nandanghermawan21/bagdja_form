@@ -82,6 +82,7 @@ class DataCollectionState extends State<DataCollectionView> {
             color: Colors.white,
             child: ListDataComponent<CollectionModel?>(
               controller: dataCollectionViewModel.collectionListController,
+              enableGetMore: false,
               dataSource: (skip, search) {
                 return CollectionModel.list(
                   token: System.data.global.token,
@@ -218,6 +219,7 @@ class DataCollectionState extends State<DataCollectionView> {
               child: ListDataComponent<CollectionDataModel?>(
                 controller:
                     dataCollectionViewModel.collectionDataListController,
+                enableGetMore: false,
                 header: Container(
                   padding: const EdgeInsets.all(0),
                   color: System.data.color!.primaryColor,
