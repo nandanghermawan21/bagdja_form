@@ -153,7 +153,7 @@ class DicissionModel {
         HttpHeaders.authorizationHeader: "$token",
       },
       otpRequired: null,
-      body: (dicissionModel?.toInputJson() ?? {})..remove("id"),
+      body: (dicissionModel?.toInputJson() ?? {}),
     ).then((value) {
       return value == null ? null : DicissionModel.fromJson((value));
     }).catchError(

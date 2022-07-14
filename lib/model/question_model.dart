@@ -162,6 +162,7 @@ class QuestionTypes {
   static const String positiontag = "positiontag";
   static const String text = "text";
   static const String video = "video";
+  static const String phone = "phone";
 
   static bool needCollectionData(String code) {
     switch (code) {
