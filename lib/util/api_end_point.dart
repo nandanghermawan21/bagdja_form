@@ -1,7 +1,10 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
+
 import 'package:suzuki/util/mode_util.dart';
 
 class ApiEndPoint {
-  String baseUrl = "https://form.bagdja.com/api/";
+  String baseUrl = "/survey/api/";
   String baseUrlDebug = "https://form.bagdja.com/api/";
   String loginUrl = "auth/login";
 
@@ -60,8 +63,9 @@ class ApiEndPoint {
   //dicission
 
   String get url {
+    var _url = window.location.host;
     if (ModeUtil.debugMode == true) {
-      return baseUrlDebug;
+      return _url + baseUrlDebug;
     } else {
       return baseUrl;
     }

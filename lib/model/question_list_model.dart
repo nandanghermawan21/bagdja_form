@@ -8,12 +8,16 @@ class QuestionListModel {
   int? groupId; //": 2,
   int? questionId; //": 8,
   int? order; //": 2
+  bool? mandatory;
+  int? refQuestionId;
   final QuestionModel? question;
 
   QuestionListModel({
     this.groupId,
     this.questionId,
     this.order,
+    this.mandatory,
+    this.refQuestionId,
     this.question,
   });
 
@@ -22,9 +26,11 @@ class QuestionListModel {
         groupId: (json["group_id"] as num?)?.toInt(),
         questionId: (json["question_id"] as num?)?.toInt(),
         order: (json["order"] as num?)?.toInt(),
+        mandatory: (json["mandatory"] as num?)?.toInt() == 1 ? true : false,
+        refQuestionId: (json["ref_question_id"] as num?)?.toInt() ?? 0,
         question: QuestionModel.fronJson(
           json,
-          id: (json["groupId"] as num?)?.toInt(),
+          id: (json["question_id"] as num?)?.toInt(),
         ));
   }
 
@@ -33,6 +39,8 @@ class QuestionListModel {
       "group_id": groupId,
       "question_id": questionId,
       "order": order,
+      "mandatory": mandatory,
+      "ref_question_id": refQuestionId,
       "code": question?.code,
       "name": question?.name,
       "label": question?.label,
@@ -47,6 +55,8 @@ class QuestionListModel {
       "group_id": groupId,
       "question_id": questionId,
       "order": order,
+      "mandatory": mandatory == true ? "1" : "0",
+      "ref_question_id": refQuestionId ?? 0,
     };
   }
 

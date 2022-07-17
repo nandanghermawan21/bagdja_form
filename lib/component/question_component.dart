@@ -253,13 +253,13 @@ class QuestionComponent {
       case QuestionTypes.text:
         return iconQuestionType(
           text: "TXT",
-          color: Colors.pink,
+          color: Colors.pink.shade200,
         );
       case QuestionTypes.phone:
         return iconQuestionType(
           text: "PHN",
           iconData: FontAwesomeIcons.phone,
-          color: Colors.pink,
+          color: Colors.green.shade900,
         );
       default:
         return iconQuestionType(

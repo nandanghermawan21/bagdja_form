@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/component/basic_component.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
@@ -12,6 +13,7 @@ import 'package:suzuki/model/question_list_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view/add_question_group_view.dart';
+import 'package:suzuki/view/add_question_item_view.dart';
 import 'package:suzuki/view/add_question_view.dart';
 import 'package:suzuki/view_model/form_designer_view_model.dart';
 import 'package:suzuki/view/form_editor_view.dart';
@@ -216,7 +218,9 @@ class FormDesignerViewState extends State<FormDesignerView> {
                           },
                           onTapEdit: edituestionGroup,
                         ),
-                        questionListOfGroup(data),
+                        questionListOfGroup(
+                          data,
+                        ),
                       ],
                     ),
                   ),
@@ -275,23 +279,49 @@ class FormDesignerViewState extends State<FormDesignerView> {
           );
         },
         itemBuilder: (dataList, index) {
-          return QuestionComponent.questionItem(
-            dataList?.question,
-            showEdit: false,
-            onTapDelete: (qs) {
-              BasicComponent.confirmModal(
-                context,
-                message:
-                    "Are you sure, will remove ${dataList?.question?.name} from ${data?.name} group?",
-              ).then(
-                (value) {
-                  if (value == true) {
+          return Container(
+            color: Colors.transparent,
+            child: Stack(
+              children: [
+                QuestionComponent.questionItem(dataList?.question,
+                    showEdit: true, onTapDelete: (qs) {
+                  BasicComponent.confirmModal(
+                    context,
+                    message:
+                        "Are you sure, will remove ${dataList?.question?.name} from ${data?.name} group?",
+                  ).then(
+                    (value) {
+                      if (value == true) {
+                        formDesignerViewModel
+                            .deleteQuestionFromQuestionGroup(dataList);
+                      }
+                    },
+                  );
+                }, onTapEdit: (qi) {
+                  editQuestionItem(
+                    dataList,
                     formDesignerViewModel
-                        .deleteQuestionFromQuestionGroup(dataList);
-                  }
-                },
-              );
-            },
+                            .questionListOfGroup["${data?.id}"]?.value.data
+                            .map((e) => e?.question)
+                            .toList() ??
+                        [],
+                  );
+                }),
+                dataList?.mandatory == true
+                    ? const Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 15, top: 5),
+                          child: Icon(
+                            FontAwesomeIcons.asterisk,
+                            color: Colors.red,
+                            size: 10,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           );
         },
         onWillReceiveDropedData: (dropedData, index) {
@@ -530,6 +560,33 @@ class FormDesignerViewState extends State<FormDesignerView> {
       },
     ).then((value) {
       formDesignerViewModel.questionGroupController.refresh();
+    });
+  }
+
+  Future<void> editQuestionItem([
+    QuestionListModel? questionModel,
+    List<QuestionModel?>? questionModelRef,
+  ]) {
+    double width = MediaQuery.of(context).size.width;
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (contex) {
+        return Align(
+          alignment: Alignment.center,
+          child: Card(
+            elevation: 3,
+            child: AddQuestionItemView(
+              width: (width * 30 / 100) > 500 ? (width * 30 / 100) : 500,
+              questionListModel: questionModel,
+              questionModelRef: questionModelRef,
+            ),
+          ),
+        );
+      },
+    ).then((value) {
+      formDesignerViewModel.questionListOfGroup["${questionModel?.groupId}"]
+          ?.refresh();
     });
   }
 }

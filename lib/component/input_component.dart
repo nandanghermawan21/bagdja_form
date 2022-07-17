@@ -94,6 +94,7 @@ class InputComponent {
     required Future<List<T?>?>? dataSource,
     required WidgetFromDataBuilder<T?>? itemBuilder,
     bool isValid = true,
+    bool readOnly = false,
   }) {
     return Container(
       color: Colors.transparent,
@@ -115,6 +116,7 @@ class InputComponent {
                 if (s.hasData) {
                   return PopupMenuButton<T>(
                     onSelected: onSelected,
+                    enabled: !readOnly,
                     itemBuilder: (context) {
                       return List.generate((s.data?.length ?? 0), (index) {
                         return PopupMenuItem<T>(
@@ -149,13 +151,15 @@ class InputComponent {
                                     ? selectedBuilder(value)
                                     : itemBuilder!(value)),
                           ),
-                          Container(
-                            width: 25,
-                            color: Colors.transparent,
-                            child: const Center(
-                              child: Icon(FontAwesomeIcons.caretDown),
-                            ),
-                          )
+                          readOnly
+                              ? const SizedBox()
+                              : Container(
+                                  width: 25,
+                                  color: Colors.transparent,
+                                  child: const Center(
+                                    child: Icon(FontAwesomeIcons.caretDown),
+                                  ),
+                                )
                         ],
                       ),
                     ),

@@ -196,13 +196,20 @@ class AddQuestionViewState extends State<AddQuestionVew> {
                               flex: 2,
                               child: GestureDetector(
                                 onTap: () {
-                                  CollectionComponent.collectionSelector(
+                                  if (QuestionTypes.needCollectionData(
+                                      addQuestionViewModel
+                                              .questionTypesModel?.code ??
+                                          "")) {
+                                    CollectionComponent.collectionSelector(
                                       context: context,
                                       onSelected: (data) {
+                                        if (data == null) return;
                                         addQuestionViewModel.collectionModel =
                                             data;
                                         addQuestionViewModel.commit();
-                                      });
+                                      },
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   color: Colors.transparent,
@@ -236,7 +243,12 @@ class AddQuestionViewState extends State<AddQuestionVew> {
                                             ),
                                           ),
                                           child: Text(
-                                            "${d.collectionModel?.id ?? ""} ${d.collectionModel?.name ?? ""}",
+                                            QuestionTypes.needCollectionData(d
+                                                        .questionTypesModel
+                                                        ?.code ??
+                                                    "")
+                                                ? "${d.collectionModel?.id ?? ""} ${d.collectionModel?.name ?? ""}"
+                                                : "",
                                             style: System
                                                 .data.textStyle!.basicLabel,
                                           ),
@@ -263,8 +275,9 @@ class AddQuestionViewState extends State<AddQuestionVew> {
                                 addQuestionViewModel.save();
                               },
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      System.data.color!.link)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    System.data.color!.link),
+                              ),
                               child: Text(
                                 System.data.strings!.save,
                                 style: TextStyle(
