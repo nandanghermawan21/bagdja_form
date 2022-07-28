@@ -39,7 +39,7 @@ class QuestionListModel {
       "group_id": groupId,
       "question_id": questionId,
       "order": order,
-      "mandatory": mandatory,
+      "mandatory": mandatory == true ? 1 : 0,
       "ref_question_id": refQuestionId,
       "code": question?.code,
       "name": question?.name,

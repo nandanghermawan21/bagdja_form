@@ -65,9 +65,9 @@ class ApiEndPoint {
   String get url {
     var _url = window.location.host;
     if (ModeUtil.debugMode == true) {
-      return _url + baseUrlDebug;
+      return baseUrlDebug;
     } else {
-      return baseUrl;
+      return _url + baseUrl;
     }
   }
 }
