@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: home(),
       ),
@@ -30,6 +31,7 @@ Widget home() {
     value: data,
     builder: (c, w) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(),
         routes: data.route ?? const <String, WidgetBuilder>{},
         initialRoute: data.initialRouteName,

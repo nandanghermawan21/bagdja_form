@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/model/menu_model.dart';
+import 'package:suzuki/util/enum.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/main_menu_view_model.dart';
 import 'package:suzuki/util/type.dart';
@@ -8,8 +10,10 @@ import 'package:suzuki/util/type.dart';
 class MainMenuView extends StatefulWidget {
   final List<MenuModel?>? drawerMenus;
   final WidgetFromDataBuilder<MenuModel?>? onCreateBody;
+  final VoidCallback? onLogout;
 
-  const MainMenuView({Key? key, this.drawerMenus, this.onCreateBody})
+  const MainMenuView(
+      {Key? key, this.drawerMenus, this.onCreateBody, this.onLogout})
       : super(key: key);
 
   @override
@@ -71,11 +75,64 @@ class MainMenuState extends State<MainMenuView> {
                   child: FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Text(
-                      "Mobile Survey",
+                      "${System.data.global.user?.email}",
                       style: System.data.textStyle!.boldTitleLabel.copyWith(
                         color: System.data.color!.lightTextColor,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 50,
+                  color: Colors.transparent,
+                  child: GestureDetector(
+                    onTapUp: (td) {
+                      showMenu<int>(
+                        context: context,
+                        position: RelativeRect.fromLTRB(
+                          td.globalPosition.dx,
+                          td.globalPosition.dy + 20,
+                          0,
+                          0,
+                        ),
+                        items: [
+                          PopupMenuItem(
+                            padding: const EdgeInsets.all(5),
+                            value: 0,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 10, top: 10),
+                              decoration: BoxDecoration(
+                                  color: System.data.color!.lightBackground),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Logout",
+                                    style: System.data.textStyle!.basicLabel,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ).then((value) {
+                        switch (value) {
+                          case 0:
+                            if (widget.onLogout != null) {
+                              widget.onLogout!();
+                            }
+                            break;
+                          default:
+                        }
+                        return value;
+                      });
+                    },
+                    child: Icon(
+                      FontAwesomeIcons.userAlt,
+                      color: System.data.color!.lightTextColor,
                     ),
                   ),
                 )

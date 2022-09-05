@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/model/menu_model.dart';
+import 'package:suzuki/util/enum.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view/login_view.dart';
 import 'package:suzuki/view/main_menu.dart';
@@ -66,6 +67,10 @@ Map<String, WidgetBuilder> route = {
           default:
             return UnderConstructionView();
         }
+      },
+      onLogout: () {
+        System.data.session!.setString(SessionKey.user, "");
+        Navigator.of(context).pushReplacementNamed(RouteName.login);
       },
     );
   }
