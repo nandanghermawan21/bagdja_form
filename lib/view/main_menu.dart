@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/model/menu_model.dart';
-import 'package:suzuki/util/enum.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/main_menu_view_model.dart';
 import 'package:suzuki/util/type.dart';
