@@ -8,6 +8,7 @@ import 'package:unicons/unicons.dart';
 import 'package:suzuki/view/under_construction_view.dart';
 import 'package:suzuki/view/form_designer_view.dart';
 import 'package:suzuki/view/data_collection_view.dart';
+import 'package:suzuki/view/website_view.dart';
 
 String initialRouteName = RouteName.login;
 
@@ -60,6 +61,18 @@ Map<String, WidgetBuilder> route = {
       ],
       onCreateBody: (menu) {
         switch (menu?.id) {
+          case RouteName.dashboard:
+            return WebsiteView(
+              key: GlobalKey(),
+              url:
+                  "https://sfimos.sfi.co.id/mos_new/orders/list_order/sfi_survey",
+            );
+          case RouteName.user:
+            return WebsiteView(
+              key: GlobalKey(),
+              url:
+                  "https://sfimos.sfi.co.id/mos_new/orders/list_customer/sfi_survey",
+            );
           case RouteName.formDesigner:
             return const FormDesignerView();
           case RouteName.datacollection:

@@ -163,6 +163,8 @@ class QuestionTypes {
   static const String text = "text";
   static const String video = "video";
   static const String phone = "phone";
+  static const String date = "date";
+  static const String digit = "digit";
 
   static bool needCollectionData(String code) {
     switch (code) {

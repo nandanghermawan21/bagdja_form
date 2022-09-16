@@ -261,6 +261,17 @@ class QuestionComponent {
           iconData: FontAwesomeIcons.phone,
           color: Colors.green.shade900,
         );
+      case QuestionTypes.date:
+        return iconQuestionType(
+          text: "DT",
+          iconData: FontAwesomeIcons.calendarAlt,
+          color: Colors.blueAccent,
+        );
+      case QuestionTypes.digit:
+        return iconQuestionType(
+          text: "000",
+          color: Colors.purpleAccent,
+        );
       default:
         return iconQuestionType(
           text: "???",
