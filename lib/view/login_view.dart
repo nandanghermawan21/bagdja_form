@@ -27,7 +27,7 @@ class LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       loginViewModel.chekLogedIn(
         onLOginSuccess: widget.onLoginSuccess,
       );
