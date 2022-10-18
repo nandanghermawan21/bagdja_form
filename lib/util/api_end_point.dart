@@ -4,7 +4,7 @@ import 'dart:html';
 import 'package:suzuki/util/mode_util.dart';
 
 class ApiEndPoint {
-  String baseUrl = "/api/";
+  String baseUrl = "/survey/api/";
   String baseUrlDebug = "https://sfimos.sfi.co.id/survey/api/";
   // String baseUrlDebug = "https://form.bagdja.com/api/";
   String loginUrl = "auth/login";

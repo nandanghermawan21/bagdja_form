@@ -69,6 +69,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
       token: System.data.global.token,
       id: collectionDataModel?.collectionId,
       value: collectionDataModel?.value,
+      group: collectionDataModel?.group,
       collectionDataModel: CollectionDataModel(
         collectionId: collectionDataModel?.collectionId,
         value: valueController.text,
@@ -96,6 +97,7 @@ class AddCollectionDataViewModel extends ChangeNotifier {
         collectionId: collectionId,
         value: valueController.text,
         label: labelController.text,
+        group: groupController.text,
       ),
     ).then((value) {
       loadingController.stopLoading(

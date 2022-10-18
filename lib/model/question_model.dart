@@ -12,6 +12,8 @@ class QuestionModel {
   String? hint; //": "Nama",
   String? type; //": "text",
   int? collectionId; //": null
+  String? imageResolution;
+  bool? readObly;
 
   QuestionModel({
     this.id,
@@ -21,6 +23,8 @@ class QuestionModel {
     this.hint,
     this.type,
     this.collectionId,
+    this.imageResolution,
+    this.readObly,
   });
 
   static QuestionModel fronJson(
@@ -35,6 +39,8 @@ class QuestionModel {
       hint: (json["hint"] as String?),
       type: (json["type"] as String?),
       collectionId: (json["collection_id"] as num?)?.toInt(),
+      imageResolution: (json["image_resolution"] as String?),
+      readObly: ((json["read_only"] as num?)?.toInt() ?? 0) == 0 ? false : true,
     );
 
     if (id != null) {
@@ -53,6 +59,8 @@ class QuestionModel {
       "hint": hint,
       "type": type,
       "collection_id": collectionId,
+      'image_resolution': imageResolution,
+      'read_only': readObly == true ? 1 : 0,
     };
   }
 

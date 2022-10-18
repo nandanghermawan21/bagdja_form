@@ -90,6 +90,7 @@ class CollectionDataModel {
     required String? token,
     required int? id,
     required String? value,
+    required String? group,
     required CollectionDataModel? collectionDataModel,
   }) {
     return Network.post(
@@ -100,6 +101,7 @@ class CollectionDataModel {
       querys: {
         "id": "${id ?? ""}",
         "value": value ?? "",
+        "group": group ?? "",
       },
       headers: {
         HttpHeaders.authorizationHeader: "$token",

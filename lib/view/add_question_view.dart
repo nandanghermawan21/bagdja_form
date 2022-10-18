@@ -5,6 +5,7 @@ import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/collection_component.dart';
 import 'package:suzuki/component/input_component.dart';
 import 'package:suzuki/component/question_component.dart';
+import 'package:suzuki/model/image_resolution_model.dart';
 import 'package:suzuki/model/menu_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/model/question_types_model.dart';
@@ -266,6 +267,69 @@ class AddQuestionViewState extends State<AddQuestionVew> {
                         height: 10,
                       ),
                       Container(
+                        color: Colors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Consumer<AddQuestionViewModel>(
+                                builder: (c, d, w) {
+                                  return InputComponent.dropDownPopupWithCap<
+                                      bool?>(
+                                    isValid: true,
+                                    capTitle: "Read Only",
+                                    value: d.readOnly,
+                                    onSelected: (data) {
+                                      d.readOnly = data ?? false;
+                                      d.commit();
+                                    },
+                                    dataSource: Future.value()
+                                        .then((value) => [true, false]),
+                                    itemBuilder: (data) {
+                                      return Row(
+                                        children: [
+                                          Text(
+                                            data == true ? "Yes" : "No",
+                                            style: System
+                                                .data.textStyle!.basicLabel,
+                                          )
+                                        ],
+                                      );
+                                    },
+                                    selectedBuilder: (data) {
+                                      return Text(
+                                        data == true ? "Yes" : "No",
+                                        style:
+                                            System.data.textStyle!.basicLabel,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Consumer<AddQuestionViewModel>(
+                                builder: (c, d, w) {
+                                  return swithAdditionalSetting1(d);
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Expanded(
+                              flex: 2,
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
                         color: Colors.transparent,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -298,6 +362,44 @@ class AddQuestionViewState extends State<AddQuestionVew> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget swithAdditionalSetting1(AddQuestionViewModel e) {
+    switch (addQuestionViewModel.questionTypesModel?.code) {
+      case QuestionTypes.foto:
+        return imageResolutionInput(e);
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget imageResolutionInput(AddQuestionViewModel d) {
+    return InputComponent.dropDownPopupWithCap<ImageResolutionModel?>(
+      isValid: d.isValidImageResolution,
+      capTitle: "Image Resolution",
+      value: d.imageResolutionModel,
+      onSelected: (data) {
+        d.imageResolutionModel = data;
+        d.commit();
+      },
+      dataSource: ImageResolutionModel.resolutions(),
+      itemBuilder: (data) {
+        return Row(
+          children: [
+            Text(
+              data?.name ?? "",
+              style: System.data.textStyle!.basicLabel,
+            )
+          ],
+        );
+      },
+      selectedBuilder: (data) {
+        return Text(
+          data?.name ?? "",
+          style: System.data.textStyle!.basicLabel,
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/model/collection_model.dart';
+import 'package:suzuki/model/image_resolution_model.dart';
 import 'package:suzuki/model/question_model.dart';
 import 'package:suzuki/model/question_types_model.dart';
 import 'package:suzuki/util/error_handling_util.dart';
@@ -15,6 +16,8 @@ class AddQuestionViewModel extends ChangeNotifier {
   TextEditingController hintController = TextEditingController();
   QuestionTypesModel? questionTypesModel;
   CollectionModel? collectionModel;
+  ImageResolutionModel? imageResolutionModel;
+  bool readOnly = false;
 
   List<QuestionTypesModel?> listQuestionType = [];
 
@@ -24,6 +27,7 @@ class AddQuestionViewModel extends ChangeNotifier {
   bool isValidHint = true;
   bool isValidType = true;
   bool isValidCollection = true;
+  bool isValidImageResolution = true;
 
   void fill() {
     loadingController.startLoading();
@@ -50,6 +54,14 @@ class AddQuestionViewModel extends ChangeNotifier {
         );
       },
     );
+    ImageResolutionModel.resolutions().then((value) {
+      imageResolutionModel = value
+          .where((w) => w.code == questionModel?.imageResolution)
+          .toList()
+          .first;
+      commit();
+    });
+    readOnly = questionModel?.readObly ?? false;
     commit();
   }
 
@@ -114,6 +126,17 @@ class AddQuestionViewModel extends ChangeNotifier {
     }
   }
 
+  bool? validateImageResolution() {
+    if (imageResolutionModel == null &&
+        questionTypesModel?.code == QuestionTypes.foto) {
+      isValidImageResolution = false;
+      return false;
+    } else {
+      isValidImageResolution = true;
+      return true;
+    }
+  }
+
   bool validate() {
     bool _valid = true;
     _valid = validateCode() ?? _valid;
@@ -122,6 +145,7 @@ class AddQuestionViewModel extends ChangeNotifier {
     _valid = validateHint() ?? _valid;
     _valid = validateType() ?? _valid;
     _valid = validateCollection() ?? _valid;
+    _valid = validateImageResolution() ?? _valid;
     commit();
     return _valid;
   }
@@ -147,6 +171,8 @@ class AddQuestionViewModel extends ChangeNotifier {
         label: labelController.text,
         type: questionTypesModel?.code,
         collectionId: collectionModel?.id,
+        imageResolution: imageResolutionModel?.code,
+        readObly: readOnly,
       ),
     ).then((value) {
       loadingController.stopLoading(
@@ -173,6 +199,8 @@ class AddQuestionViewModel extends ChangeNotifier {
         label: labelController.text,
         type: questionTypesModel?.code,
         collectionId: collectionModel?.id,
+        imageResolution: imageResolutionModel?.code,
+        readObly: readOnly,
       ),
     ).then((value) {
       loadingController.stopLoading(
