@@ -59,7 +59,9 @@ class LoginViewState extends State<LoginView> {
                   margin: const EdgeInsets.all(20),
                   color: Colors.transparent,
                   child: Image.network(
-                      "assets/assets/kogo_suzuki_mobile_survey_horizontal.png"),
+                    System.data.strings!.assetLogoHorizontal,
+                    width: 150,
+                  ),
                 ),
               ),
               Center(

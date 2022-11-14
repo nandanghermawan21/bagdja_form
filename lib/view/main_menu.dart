@@ -60,7 +60,10 @@ class MainMenuState extends State<MainMenuView> {
                 Container(
                   color: Colors.transparent,
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Image.network("assets/assets/logo_sfi_white.png"),
+                  child: Image.network(
+                    System.data.strings!.assetLogoWhite,
+                    color: Colors.white,
+                  ),
                 ),
                 Expanded(
                   child: Container(

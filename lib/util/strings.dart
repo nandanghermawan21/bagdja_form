@@ -23,4 +23,8 @@ abstract class Strings {
   String get showMore => "Tampilkan Lainnya";
   String get save => "Simpan";
   String get selectQuestionType => "Pilih Jenis Pertanyaan";
+  String get assetLogoHorizontal =>
+      "assets/assets/kogo_suzuki_mobile_survey_horizontal.png";
+  String get assetLogoWhite =>
+      "assets/assets/assets/assets/logo_sfi_white.png.png";
 }
